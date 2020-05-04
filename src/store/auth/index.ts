@@ -3,6 +3,8 @@ import { Module } from 'vuex';
 import { GET_AUTH_INFO, GET_TOKEN, TOKEN } from '@/constants/story';
 import { IAuthState, IRootState } from '../interfaces';
 
+const { VUE_APP_API_URL } = process.env;
+
 const auth: Module<IAuthState, IRootState> = {
   namespaced: true,
 
@@ -18,7 +20,7 @@ const auth: Module<IAuthState, IRootState> = {
       if (!token) return;
 
       try {
-        const { data } = await axios.get('http://localhost:5000/api/auth', {
+        const { data } = await axios.get(`${VUE_APP_API_URL}/auth`, {
           headers: { Authorization: token },
         });
 
@@ -31,13 +33,13 @@ const auth: Module<IAuthState, IRootState> = {
 
     async signUp(_, body): Promise<void> {
       try {
-        const { data } = await axios.post('http://localhost:5000/api/auth/signup', body);
+        const { data } = await axios.post(`${VUE_APP_API_URL}/auth/signup`, body);
         const formData = new FormData();
 
         formData.append('userId', data);
         formData.append('file', body.file);
 
-        await axios.post('http://localhost:5000/api/upload/image', formData, {
+        await axios.post(`${VUE_APP_API_URL}/upload/image`, formData, {
           headers: {
             'Content-type': 'multipart/form-data; charset=utf8; boundary="--Boundary-8F6C36F3-A273-4FF8-AED2-1098C7C5BD87"--Boundary-8F6C36F3-A273-4FF8-AED2-1098C7C5BD87',
           },
@@ -49,7 +51,7 @@ const auth: Module<IAuthState, IRootState> = {
 
     async signIn({ dispatch }, body): Promise<void> {
       try {
-        const { data } = await axios.post('http://localhost:5000/api/auth/signin', body);
+        const { data } = await axios.post(`${VUE_APP_API_URL}/auth/signin`, body);
 
         localStorage.setItem(TOKEN, data.token);
 

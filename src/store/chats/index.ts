@@ -9,6 +9,8 @@ import {
 } from '@/constants/story';
 import { IChatState, IRootState, IMsg } from '../interfaces';
 
+const { VUE_APP_API_URL } = process.env;
+
 const chats: Module<IChatState, IRootState> = {
   namespaced: true,
 
@@ -24,23 +26,23 @@ const chats: Module<IChatState, IRootState> = {
       if (!token) return;
 
       try {
-        const { data } = await axios
-          .post(`${process.env.VUE_APP_API_URL}/chats/new`, { recipientID }, {
-            headers: { Authorization: token },
-          });
+        const { data } = await axios.post(`${VUE_APP_API_URL}/chats/new`, { recipientID }, {
+          headers: { Authorization: token },
+        });
 
         commit(GET_CHAT, data);
       } catch (e) {
         throw new Error('Problems with grabbing the page!');
       }
     },
+
     async getChatList({ commit }): Promise<void> {
       const token = localStorage.getItem(TOKEN);
 
       if (!token) return;
 
       try {
-        const { data } = await axios.get(`${process.env.VUE_APP_API_URL}/chats/`, {
+        const { data } = await axios.get(`${VUE_APP_API_URL}/chats/`, {
           headers: { Authorization: token },
         });
 
@@ -49,6 +51,7 @@ const chats: Module<IChatState, IRootState> = {
         throw new Error('Problems with grabbing the page!');
       }
     },
+
     async getMsgList({ commit }, chatID): Promise<void> {
       const token = localStorage.getItem(TOKEN);
 
@@ -56,7 +59,7 @@ const chats: Module<IChatState, IRootState> = {
 
       try {
         const { data } = await axios
-          .post(`${process.env.VUE_APP_API_URL}/chats/messages`, { chatID }, {
+          .post(`${VUE_APP_API_URL}/chats/messages`, { chatID }, {
             headers: { Authorization: token },
           });
 
@@ -65,6 +68,7 @@ const chats: Module<IChatState, IRootState> = {
         throw new Error('Problems with grabbing the page!');
       }
     },
+
     getMsg({ commit }, { data }): void {
       commit(GET_MSG, JSON.parse(data));
     },
@@ -74,6 +78,7 @@ const chats: Module<IChatState, IRootState> = {
     [GET_CHAT_LIST](state, chatList) {
       state.chatList = chatList;
     },
+
     [GET_CHAT](state, chat) {
       if (!state.chatList) {
         state.chatList = [chat];
@@ -81,9 +86,11 @@ const chats: Module<IChatState, IRootState> = {
         state.chatList.push(chat);
       }
     },
+
     [GET_MSG_LIST](state, msgList) {
       state.msgList = msgList;
     },
+
     [GET_MSG](state, newMsg) {
       if (!state.msgList) {
         state.msgList = [newMsg];
@@ -105,6 +112,7 @@ const chats: Module<IChatState, IRootState> = {
         return { id, login: member?.login };
       });
     },
+
     msgListWithLogin: ({ msgList }): object[] | null => msgList && msgList
       .map(({ text, chatID, author }) => ({ text, chatID, login: author.login })),
   },

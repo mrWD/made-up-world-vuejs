@@ -2,6 +2,7 @@ import axios from 'axios';
 import { Module } from 'vuex';
 import { GET_PAGES, SAVE_PAGE, TOKEN } from '@/constants/story';
 import { IPage, IPageState, IRootState } from '../interfaces';
+const { VUE_APP_API_URL } = process.env;
 
 const page: Module<IPageState, IRootState> = {
   namespaced: true,
@@ -13,7 +14,7 @@ const page: Module<IPageState, IRootState> = {
   actions: {
     async getPage({ commit }, storyURL): Promise<void> {
       try {
-        const { data } = await axios.get<IPage[]>('http://localhost:5000/api/editing/edit', {
+        const { data } = await axios.get<IPage[]>(`${VUE_APP_API_URL}/editing/edit`, {
           data: { storyURL },
           headers: { Authorization: localStorage.getItem(TOKEN) },
         });
@@ -26,7 +27,7 @@ const page: Module<IPageState, IRootState> = {
 
     async removePage({ commit }, storyURL): Promise<void> {
       try {
-        const { data } = await axios.get<IPage[]>('http://localhost:5000/api/editing/edit', {
+        const { data } = await axios.get<IPage[]>(`${VUE_APP_API_URL}/editing/edit`, {
           data: { storyURL },
           headers: { Authorization: localStorage.getItem(TOKEN) },
         });
@@ -39,9 +40,10 @@ const page: Module<IPageState, IRootState> = {
 
     async savePage({ commit }, body) {
       try {
-        const { data } = await axios.post<IPage>('http://localhost:5000/api/editing/save', body, {
-          headers: { Authorization: localStorage.getItem(TOKEN) },
-        });
+        const { data } = await axios
+          .post<IPage>(`${VUE_APP_API_URL}/editing/save`, body, {
+            headers: { Authorization: localStorage.getItem(TOKEN) },
+          });
 
         commit(SAVE_PAGE, {
           ...body,
