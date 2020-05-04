@@ -7,7 +7,7 @@
 
       Photo.user__photo(
         v-if="userInfo.photo"
-        :src="`http://localhost:5000/uploads${userInfo.photo}`"
+        :src="`${config.VUE_APP_API_URL}/${userInfo.destination}/${userInfo.photo}`"
         :alt="userInfo.login"
         width="200"
       )

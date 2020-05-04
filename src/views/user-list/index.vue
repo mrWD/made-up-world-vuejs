@@ -16,7 +16,7 @@
           :to="{ name: 'User', params: { id: user.login } }"
         )
           Photo.user-list__photo(
-            :src="`http://localhost:5000/uploads${user.photo}`"
+            :src="`${config.VUE_APP_API_URL}/${userList.destination}/${user.photo}`"
             :alt="user.login"
             width="50"
             height="50"

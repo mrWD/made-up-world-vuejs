@@ -34,7 +34,7 @@
 import Vue from 'vue';
 import { mapGetters, mapActions } from 'vuex';
 
-const socket = new WebSocket('ws://192.168.0.48:5000/');
+const socket = new WebSocket(process.env.VUE_APP_CHAT_URL);
 
 export default Vue.extend({
   name: 'Chat',
