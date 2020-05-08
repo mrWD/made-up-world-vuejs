@@ -54,7 +54,6 @@
 <script lang="ts">
 import Vue from 'vue';
 import { mapActions } from 'vuex';
-import Axios from 'axios';
 
 export default Vue.extend({
   name: 'SignUp',
@@ -103,13 +102,13 @@ export default Vue.extend({
 <style lang="sass">
 .sign-up
   position: absolute
-  top: 100%
+  top: calc(100% + 15px)
   right: -15px
   display: flex
   flex-direction: column
   width: 355px
   max-height: 100vh
-  padding: 16.5% 35px
+  padding: 30px 25px
   background-image: url('../../../assets/images/inner-bg.png')
   background-size: 100% 100%
 
@@ -117,19 +116,28 @@ export default Vue.extend({
     right: 0
     width: 320px
 
-  &:before
+  &:before,
+  &:after
     position: absolute
-    top: -6px
-    right: 65px
-    transform: rotate(45deg)
-    display: block
-    width: 15px
-    height: 15px
+    left: -8px
+    right: -8px
+    height: 40px
+    background-position: center
+    background-repeat: no-repeat
+    background-size: 100% 100%
     content: ''
+
+  &:before
+    top: -15px
+    background-image: url('../../../assets/images/inner-top-bg.png')
+
+  &:after
+    bottom: -15px
+    background-image: url('../../../assets/images/inner-bottom-bg.png')
 
   &__close
     position: absolute
-    top: 5px
+    top: -5px
     right: 35px
 
     +for-tablet-up

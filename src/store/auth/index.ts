@@ -1,6 +1,12 @@
 import axios from 'axios';
 import { Module } from 'vuex';
-import { GET_AUTH_INFO, GET_TOKEN, TOKEN } from '@/constants/story';
+import {
+  GET_AUTH_INFO,
+  GET_TOKEN,
+  TOKEN,
+  UPDATE_REQUEST_COUNT,
+  ADD_ERROR,
+} from '@/constants/story';
 import { IAuthState, IRootState } from '../interfaces';
 
 const { VUE_APP_API_URL } = process.env;
@@ -14,25 +20,31 @@ const auth: Module<IAuthState, IRootState> = {
   },
 
   actions: {
-    async getAuthInfo({ commit }): Promise<void> {
+    async getAuthInfo({ commit, rootState }): Promise<void> {
       const token = localStorage.getItem(TOKEN);
 
       if (!token) return;
 
       try {
+        commit(UPDATE_REQUEST_COUNT, true, { root: true });
+
         const { data } = await axios.get(`${VUE_APP_API_URL}/auth`, {
           headers: { Authorization: token },
         });
 
         commit(GET_TOKEN, token);
         commit(GET_AUTH_INFO, data);
-      } catch (e) {
-        throw new Error('Problems with grabbing the page!');
+      } catch (err) {
+        commit(ADD_ERROR, 'Problems with grabbing the page!', { root: true });
+      } finally {
+        commit(UPDATE_REQUEST_COUNT, false, { root: true });
       }
     },
 
-    async signUp(_, body): Promise<void> {
+    async signUp({ commit }, body): Promise<void> {
       try {
+        commit(UPDATE_REQUEST_COUNT, true, { root: true });
+
         const { data } = await axios.post(`${VUE_APP_API_URL}/auth/signup`, body);
         const formData = new FormData();
 
@@ -44,20 +56,26 @@ const auth: Module<IAuthState, IRootState> = {
             'Content-type': 'multipart/form-data; charset=utf8; boundary="--Boundary-8F6C36F3-A273-4FF8-AED2-1098C7C5BD87"--Boundary-8F6C36F3-A273-4FF8-AED2-1098C7C5BD87',
           },
         });
-      } catch (error) {
-        throw new Error('Problems with grabbing the page!');
+      } catch (err) {
+        commit(ADD_ERROR, 'Problems with grabbing the page!', { root: true });
+      } finally {
+        commit(UPDATE_REQUEST_COUNT, false, { root: true });
       }
     },
 
-    async signIn({ dispatch }, body): Promise<void> {
+    async signIn({ commit, dispatch }, body): Promise<void> {
       try {
+        commit(UPDATE_REQUEST_COUNT, true, { root: true });
+
         const { data } = await axios.post(`${VUE_APP_API_URL}/auth/signin`, body);
 
         localStorage.setItem(TOKEN, data.token);
 
         dispatch('getAuthInfo');
-      } catch (error) {
-        throw new Error('Problems with grabbing the page!');
+      } catch (err) {
+        commit(ADD_ERROR, 'Problems with grabbing the page!', { root: true });
+      } finally {
+        commit(UPDATE_REQUEST_COUNT, false, { root: true });
       }
     },
 

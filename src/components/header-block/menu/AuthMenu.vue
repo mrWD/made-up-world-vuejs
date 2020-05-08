@@ -39,27 +39,35 @@ export default Vue.extend({
 
   +for-tablet-up
     position: absolute
-    top: 100%
+    top: calc(100% + 15px)
     right: 0
     display: flex
     flex-direction: column
     width: 320px
-    padding: 15px 25px
+    padding: 30px 25px
     border-radius: 4px
     background-image: url('../../../assets/images/inner-bg.png')
     background-size: 100% 100%
     text-align: left
 
+  &:before,
+  &:after
+    position: absolute
+    left: -8px
+    right: -8px
+    height: 40px
+    background-position: center
+    background-repeat: no-repeat
+    background-size: 100% 100%
+    content: ''
+
   &:before
-    +for-tablet-up
-      position: absolute
-      top: -6px
-      right: 65px
-      transform: rotate(45deg)
-      display: block
-      width: 15px
-      height: 15px
-      content: ''
+    top: -15px
+    background-image: url('../../../assets/images/inner-top-bg.png')
+
+  &:after
+    bottom: -15px
+    background-image: url('../../../assets/images/inner-bottom-bg.png')
 
   &__item
     display: block

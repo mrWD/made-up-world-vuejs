@@ -6,6 +6,7 @@ import users from './users';
 import page from './page';
 import stories from './stories';
 import chats from './chats';
+import requestStatus from './requestStatus';
 
 Vue.use(Vuex);
 
@@ -16,5 +17,6 @@ export default new Vuex.Store({
     page,
     stories,
     chats,
+    requestStatus,
   },
 });

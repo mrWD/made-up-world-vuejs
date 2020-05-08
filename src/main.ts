@@ -15,6 +15,14 @@ Vue.config.productionTip = false;
 
 Vue.use(SVGIcon);
 
+Vue.mixin({
+  data() {
+    return {
+      config: process.env,
+    };
+  },
+});
+
 Vue.component('Field', Field);
 Vue.component('Btn', Btn);
 

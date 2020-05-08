@@ -4,7 +4,7 @@
       Btn.menu__tablet-btn(isText @click="isMenuVisible = !isMenuVisible")
         | {{ authInfo.login }}
 
-      AuthMenu(v-show="isMenuVisible" :login="authInfo.login" @signOut="signOut")
+      AuthMenu(v-if="isMenuVisible" :login="authInfo.login" @signOut="signOut")
 
     template(v-else)
       Btn.menu__btn(isText @click="showAuth('signin')") Sign In

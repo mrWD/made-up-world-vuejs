@@ -6,6 +6,8 @@ import {
   GET_MSG_LIST,
   GET_MSG,
   TOKEN,
+  UPDATE_REQUEST_COUNT,
+  ADD_ERROR,
 } from '@/constants/story';
 import { IChatState, IRootState, IMsg } from '../interfaces';
 
@@ -15,24 +17,29 @@ const chats: Module<IChatState, IRootState> = {
   namespaced: true,
 
   state: {
+    currentChat: null,
     chatList: null,
     msgList: null,
   },
 
   actions: {
-    async createChat({ commit }, recipientID) {
+    async getChatByRecipient({ commit }, recipientID) {
       const token = localStorage.getItem(TOKEN);
 
       if (!token) return;
 
       try {
+        commit(UPDATE_REQUEST_COUNT, true, { root: true });
+
         const { data } = await axios.post(`${VUE_APP_API_URL}/chats/new`, { recipientID }, {
           headers: { Authorization: token },
         });
 
         commit(GET_CHAT, data);
-      } catch (e) {
-        throw new Error('Problems with grabbing the page!');
+      } catch (err) {
+        commit(ADD_ERROR, 'Problems with grabbing the page!', { root: true });
+      } finally {
+        commit(UPDATE_REQUEST_COUNT, false, { root: true });
       }
     },
 
@@ -42,13 +49,17 @@ const chats: Module<IChatState, IRootState> = {
       if (!token) return;
 
       try {
+        commit(UPDATE_REQUEST_COUNT, true, { root: true });
+
         const { data } = await axios.get(`${VUE_APP_API_URL}/chats/`, {
           headers: { Authorization: token },
         });
 
         commit(GET_CHAT_LIST, data);
-      } catch (e) {
-        throw new Error('Problems with grabbing the page!');
+      } catch (err) {
+        commit(ADD_ERROR, 'Problems with grabbing the page!', { root: true });
+      } finally {
+        commit(UPDATE_REQUEST_COUNT, false, { root: true });
       }
     },
 
@@ -58,14 +69,18 @@ const chats: Module<IChatState, IRootState> = {
       if (!token) return;
 
       try {
+        commit(UPDATE_REQUEST_COUNT, true, { root: true });
+
         const { data } = await axios
           .post(`${VUE_APP_API_URL}/chats/messages`, { chatID }, {
             headers: { Authorization: token },
           });
 
         commit(GET_MSG_LIST, data);
-      } catch (e) {
-        throw new Error('Problems with grabbing the page!');
+      } catch (err) {
+        commit(ADD_ERROR, 'Problems with grabbing the page!', { root: true });
+      } finally {
+        commit(UPDATE_REQUEST_COUNT, false, { root: true });
       }
     },
 
@@ -82,9 +97,16 @@ const chats: Module<IChatState, IRootState> = {
     [GET_CHAT](state, chat) {
       if (!state.chatList) {
         state.chatList = [chat];
-      } else {
+        return;
+      }
+
+      const stateChat = state.chatList.find(({ id }) => id === chat.id);
+
+      if (!stateChat) {
         state.chatList.push(chat);
       }
+
+      state.currentChat = chat.id;
     },
 
     [GET_MSG_LIST](state, msgList) {
@@ -101,6 +123,8 @@ const chats: Module<IChatState, IRootState> = {
   },
 
   getters: {
+    currentChat: ({ currentChat }) => currentChat,
+
     chatListWithLogin: ({ chatList }, _, { auth }): object[] | null => {
       if (!chatList) {
         return null;

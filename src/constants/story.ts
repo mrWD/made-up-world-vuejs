@@ -19,3 +19,8 @@ export const GET_CHAT_LIST: 'GET_CHAT_LIST' = 'GET_CHAT_LIST';
 export const GET_CHAT: 'GET_CHAT' = 'GET_CHAT';
 export const GET_MSG_LIST: 'GET_MSG_LIST' = 'GET_MSG_LIST';
 export const GET_MSG: 'GET_MSG' = 'GET_MSG';
+
+
+export const UPDATE_REQUEST_COUNT: 'UPDATE_REQUEST_COUNT' = 'UPDATE_REQUEST_COUNT';
+export const ADD_ERROR: 'ADD_ERROR' = 'ADD_ERROR';
+export const REMOVE_ERROR: 'REMOVE_ERROR' = 'REMOVE_ERROR';

@@ -49,7 +49,14 @@ export interface IMsg {
   author: { login: string };
 }
 
+export interface IReqStatusState {
+  isLoading: boolean;
+  requestCount: number;
+  errors: string[];
+}
+
 export interface IChatState {
+  currentChat: string | null;
   chatList: IChat[] | null;
   msgList: IMsg[] | null;
 }

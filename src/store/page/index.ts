@@ -1,7 +1,16 @@
 import axios from 'axios';
 import { Module } from 'vuex';
-import { GET_PAGES, SAVE_PAGE, TOKEN } from '@/constants/story';
+
+import {
+  GET_PAGES,
+  SAVE_PAGE,
+  TOKEN,
+  UPDATE_REQUEST_COUNT,
+  ADD_ERROR,
+} from '@/constants/story';
+
 import { IPage, IPageState, IRootState } from '../interfaces';
+
 const { VUE_APP_API_URL } = process.env;
 
 const page: Module<IPageState, IRootState> = {
@@ -14,32 +23,42 @@ const page: Module<IPageState, IRootState> = {
   actions: {
     async getPage({ commit }, storyURL): Promise<void> {
       try {
+        commit(UPDATE_REQUEST_COUNT, true, { root: true });
+
         const { data } = await axios.get<IPage[]>(`${VUE_APP_API_URL}/editing/edit`, {
           data: { storyURL },
           headers: { Authorization: localStorage.getItem(TOKEN) },
         });
 
         commit(GET_PAGES, data);
-      } catch (e) {
-        throw new Error('Problems with grabbing the page!');
+      } catch (err) {
+        commit(ADD_ERROR, 'Problems with grabbing the page!', { root: true });
+      } finally {
+        commit(UPDATE_REQUEST_COUNT, false, { root: true });
       }
     },
 
     async removePage({ commit }, storyURL): Promise<void> {
       try {
+        commit(UPDATE_REQUEST_COUNT, true, { root: true });
+
         const { data } = await axios.get<IPage[]>(`${VUE_APP_API_URL}/editing/edit`, {
           data: { storyURL },
           headers: { Authorization: localStorage.getItem(TOKEN) },
         });
 
         commit(GET_PAGES, data);
-      } catch (e) {
-        throw new Error('Problems with grabbing the page!');
+      } catch (err) {
+        commit(ADD_ERROR, 'Problems with grabbing the page!', { root: true });
+      } finally {
+        commit(UPDATE_REQUEST_COUNT, false, { root: true });
       }
     },
 
     async savePage({ commit }, body) {
       try {
+        commit(UPDATE_REQUEST_COUNT, true, { root: true });
+
         const { data } = await axios
           .post<IPage>(`${VUE_APP_API_URL}/editing/save`, body, {
             headers: { Authorization: localStorage.getItem(TOKEN) },
@@ -50,8 +69,10 @@ const page: Module<IPageState, IRootState> = {
           pageId: data.pageId,
           storyURL: data.storyURL,
         });
-      } catch (e) {
-        throw new Error('Problems with saving the page!');
+      } catch (err) {
+        commit(ADD_ERROR, 'Problems with grabbing the page!', { root: true });
+      } finally {
+        commit(UPDATE_REQUEST_COUNT, false, { root: true });
       }
     },
   },

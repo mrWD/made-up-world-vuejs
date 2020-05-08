@@ -7,6 +7,8 @@ import {
   GET_PAGE_NUMBER,
   GET_PAGE_COUNT,
   TOKEN,
+  UPDATE_REQUEST_COUNT,
+  ADD_ERROR,
 } from '@/constants/story';
 import { IStory, IStoryState, IRootState } from '../interfaces';
 
@@ -28,6 +30,8 @@ const page: Module<IStoryState, IRootState> = {
       const token = localStorage.getItem(TOKEN);
 
       try {
+        commit(UPDATE_REQUEST_COUNT, true, { root: true });
+
         const { data } = await axios.post(`${VUE_APP_API_URL}/reading/all`, body, {
           headers: { ...(token && { Authorization: token }) },
         });
@@ -35,74 +39,100 @@ const page: Module<IStoryState, IRootState> = {
         commit(GET_STORY_LIST, data.storyList);
         commit(GET_PAGE_NUMBER, data.page);
         commit(GET_PAGE_COUNT, data.pages);
-      } catch (e) {
-        throw new Error('Problems with grabbing the page!');
+      } catch (err) {
+        commit(ADD_ERROR, 'Problems with grabbing the page!', { root: true });
+      } finally {
+        commit(UPDATE_REQUEST_COUNT, false, { root: true });
       }
     },
 
     async getStory({ commit }, { storyURL, pageId }): Promise<void> {
       try {
+        commit(UPDATE_REQUEST_COUNT, true, { root: true });
+
         const { data } = await axios.post(`${VUE_APP_API_URL}/reading/page`, { storyURL, pageId });
 
         commit(GET_STORY, data);
-      } catch (e) {
-        throw new Error('Problems with grabbing the page!');
+      } catch (err) {
+        commit(ADD_ERROR, 'Problems with grabbing the page!', { root: true });
+      } finally {
+        commit(UPDATE_REQUEST_COUNT, false, { root: true });
       }
     },
 
     async getAllPages({ commit }, storyURL): Promise<void> {
       try {
+        commit(UPDATE_REQUEST_COUNT, true, { root: true });
+
         const { data } = await axios.post(`${VUE_APP_API_URL}/editing/all`, { storyURL }, {
           headers: { Authorization: localStorage.getItem(TOKEN) },
         });
 
         commit(GET_ALL_PAGES, data);
-      } catch (e) {
-        throw new Error('Problems with grabbing the page!');
+      } catch (err) {
+        commit(ADD_ERROR, 'Problems with grabbing the page!', { root: true });
+      } finally {
+        commit(UPDATE_REQUEST_COUNT, false, { root: true });
       }
     },
 
     async saveStory({ commit }, body): Promise<void> {
       try {
+        commit(UPDATE_REQUEST_COUNT, true, { root: true });
+
         const { data } = await axios.post(`${VUE_APP_API_URL}/editing/save-story`, body, {
           headers: { Authorization: localStorage.getItem(TOKEN) },
         });
 
         commit(GET_ALL_PAGES, data);
-      } catch (e) {
-        throw new Error('Problems with grabbing the page!');
+      } catch (err) {
+        commit(ADD_ERROR, 'Problems with grabbing the page!', { root: true });
+      } finally {
+        commit(UPDATE_REQUEST_COUNT, false, { root: true });
       }
     },
 
     async removeStory({ commit }, storyURL): Promise<void> {
       try {
+        commit(UPDATE_REQUEST_COUNT, true, { root: true });
+
         const { data } = await axios.post(`${VUE_APP_API_URL}/editing/remove-story`, storyURL, {
           headers: { Authorization: localStorage.getItem(TOKEN) },
         });
 
         commit(GET_ALL_PAGES, data);
-      } catch (e) {
-        throw new Error('Problems with grabbing the page!');
+      } catch (err) {
+        commit(ADD_ERROR, 'Problems with grabbing the page!', { root: true });
+      } finally {
+        commit(UPDATE_REQUEST_COUNT, false, { root: true });
       }
     },
 
-    async publishStory(_, storyURL): Promise<void> {
+    async publishStory({ commit }, storyURL): Promise<void> {
       try {
+        commit(UPDATE_REQUEST_COUNT, true, { root: true });
+
         await axios.post(`${VUE_APP_API_URL}/editing/publish`, { storyURL }, {
           headers: { Authorization: localStorage.getItem(TOKEN) },
         });
-      } catch (e) {
-        throw new Error('Problems with grabbing the page!');
+      } catch (err) {
+        commit(ADD_ERROR, 'Problems with grabbing the page!', { root: true });
+      } finally {
+        commit(UPDATE_REQUEST_COUNT, false, { root: true });
       }
     },
 
-    async unpublishStory(_, storyURL): Promise<void> {
+    async unpublishStory({ commit }, storyURL): Promise<void> {
       try {
+        commit(UPDATE_REQUEST_COUNT, true, { root: true });
+
         await axios.post(`${VUE_APP_API_URL}/editing/unpublish`, { storyURL }, {
           headers: { Authorization: localStorage.getItem(TOKEN) },
         });
-      } catch (e) {
-        throw new Error('Problems with grabbing the page!');
+      } catch (err) {
+        commit(ADD_ERROR, 'Problems with grabbing the page!', { root: true });
+      } finally {
+        commit(UPDATE_REQUEST_COUNT, false, { root: true });
       }
     },
   },

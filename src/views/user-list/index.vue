@@ -31,7 +31,7 @@
         )
           svgicon(icon="follow")
 
-        Btn.user-list__btn(v-if="authInfo" isSmall @click="createChat(user.id)")
+        Btn.user-list__btn(v-if="authInfo" isSmall @click="getChatByRecipient(user.id)")
           svgicon(icon="msg")
 
     Pagination(
@@ -67,7 +67,7 @@ export default Vue.extend({
     ...mapActions({
       getUserList: 'users/getUserList',
       follow: 'users/follow',
-      createChat: 'chats/createChat',
+      getChatByRecipient: 'chats/getChatByRecipient',
     }),
 
     isFollowed(followers: { login: string }[]): boolean {

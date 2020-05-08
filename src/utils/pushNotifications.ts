@@ -3,15 +3,15 @@ import axios from 'axios';
 const { VUE_APP_API_URL, VUE_APP_VAPID_KEY } = process.env;
 
 const urlB64ToUint8Array = (base64String: string): Uint8Array => {
-  const padding = '='.repeat((4 - base64String.length % 4) % 4);
+  const padding = '='.repeat((4 - (base64String.length % 4)) % 4);
   const base64 = (base64String + padding)
-    .replace(/\-/g, '+')
+    .replace(/-/g, '+')
     .replace(/_/g, '/');
 
   const rawData = window.atob(base64);
   const outputArray = new Uint8Array(rawData.length);
 
-  for (let i = 0; i < rawData.length; ++i) {
+  for (let i = 0; i < rawData.length; i += 1) {
     outputArray[i] = rawData.charCodeAt(i);
   }
   return outputArray;
@@ -20,13 +20,13 @@ const urlB64ToUint8Array = (base64String: string): Uint8Array => {
 const subscribeUser = async (token: string, sw: ServiceWorkerRegistration) => {
   const subscription = await sw.pushManager.subscribe({
     userVisibleOnly: true,
-    applicationServerKey: urlB64ToUint8Array(VUE_APP_VAPID_KEY)
+    applicationServerKey: urlB64ToUint8Array(VUE_APP_VAPID_KEY),
   });
 
   await axios.post(`${VUE_APP_API_URL}/push/subscribe`, subscription, {
     headers: {
       Authorization: token,
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
     },
   });
 
@@ -41,7 +41,7 @@ const unsubscribeUser = async (sw: ServiceWorkerRegistration): Promise<void> => 
   }
 
   const subscriptionData = {
-    endpoint: subscription.endpoint
+    endpoint: subscription.endpoint,
   };
 
   await axios.post(`${VUE_APP_API_URL}/push/unsubscribe`, subscriptionData, {

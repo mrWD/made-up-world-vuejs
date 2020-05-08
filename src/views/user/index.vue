@@ -1,6 +1,6 @@
 <template lang="pug">
   .user
-    span.user__text(v-if="!userInfo") No user
+    span.user__text(v-if="!userInfo") No user {{ userInfo }}
 
     template(v-else)
       h1.user__title {{ userInfo.login }}
@@ -21,13 +21,16 @@
 
       Btn.user__btn(v-else @click="follow(userInfo.login)") Follow
 
-      router-link.user__btn.btn(:to="{ name: 'Chat', options: { id: userInfo.login } }")
-        | Send message
+      Btn.user__btn(
+        v-if="!checkLogin(userInfo.login)"
+        @click="getChatByRecipient(userInfo.id)"
+      )
+        svgicon(icon="msg")
 
     hr.user__separator
 
     List(
-      v-if="storyList"
+      v-if="storyList && storyList[0]"
       title="Stories"
       routeName="Story"
       routeProp="storyURL"
@@ -48,7 +51,7 @@
           svgicon(icon="cross")
 
     List(
-      v-if="userInfo"
+      v-if="userInfo && userInfo.followings"
       title="Followings"
       routeName="User"
       routeProp="login"
@@ -59,7 +62,7 @@
         Btn.user__btn(
           v-if="!checkLogin(slotData.login)"
           isSmall
-          @click="createChat(slotData.id)"
+          @click="getChatByRecipient(slotData.id)"
         )
           svgicon(icon="msg")
 
@@ -67,7 +70,7 @@
           svgicon(icon="cross")
 
     List(
-      v-if="userInfo"
+      v-if="userInfo && userInfo.followers"
       title="Followers"
       routeName="User"
       routeProp="login"
@@ -78,7 +81,7 @@
         Btn.user__btn(
           v-if="!checkLogin(slotData.login)"
           isSmall
-          @click="createChat(slotData.id)"
+          @click="getChatByRecipient(slotData.id)"
         )
           svgicon(icon="msg")
 
@@ -121,11 +124,11 @@ export default Vue.extend({
     },
 
     isFollowed(): boolean {
-      return this.userInfo.followers.some(({ login }: any) => this.checkLogin(login));
+      return this.userInfo.followers?.some(({ login }: any) => this.checkLogin(login));
     },
 
     isFollower(): boolean {
-      return this.userInfo.followings.some(({ login }: any) => this.checkLogin(login));
+      return this.userInfo.followings?.some(({ login }: any) => this.checkLogin(login));
     },
   },
 
@@ -138,7 +141,7 @@ export default Vue.extend({
       publishStory: 'stories/publishStory',
       unpublishStory: 'stories/unpublishStory',
       removeStory: 'stories/removeStory',
-      createChat: 'chats/createChat',
+      getChatByRecipient: 'chats/getChatByRecipient',
     }),
 
     checkLogin(value: string): boolean {

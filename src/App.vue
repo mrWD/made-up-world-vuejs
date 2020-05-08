@@ -2,8 +2,12 @@
   #app
     HeaderBlock
 
+    ul.errors
+      li.errors__item(v-for="(item, i) in errors" :key="i")
+        Btn.errors__btn(isText @click="removeError(item)") {{ item }}
+
     .inner(:class="{ 'inner_fluid': isFluid }")
-      .inner__content
+      .inner__content(:class="{ 'inner__content_loading': isLoading }")
         router-view
 
     Chat(v-if="authInfo" :authInfo="authInfo" :token="token")
@@ -21,6 +25,8 @@ export default Vue.extend({
     ...mapGetters({
       token: 'auth/token',
       authInfo: 'auth/authInfo',
+      isLoading: 'isLoading',
+      errors: 'errors',
     }),
 
     isFluid(): boolean {
@@ -28,7 +34,10 @@ export default Vue.extend({
     },
   },
 
-  methods: mapActions('auth', ['getAuthInfo']),
+  methods: mapActions({
+    getAuthInfo: 'auth/getAuthInfo',
+    removeError: 'removeError',
+  }),
 
   created() {
     this.getAuthInfo();
@@ -55,6 +64,7 @@ body
 body
   min-height: 100vh
   margin: 0
+  background-color: #36291e
   background-image: url('./assets/images/bg.jpg')
   background-attachment: fixed
   background-repeat: no-repeat
@@ -89,36 +99,89 @@ ul
   margin-bottom: 0
   padding-left: 0
 
-.inner
+.errors
+  position: fixed
+  top: 70px
+  left: 0
+  right: 0
+  z-index: 100
   display: flex
-  max-width: 790px
-  height: calc(100vh - 100px)
+  flex-direction: column
+  align-items: center
   margin-left: auto
   margin-right: auto
-  padding: calc(21vh - 100px) 5.7077626%
-  background-image: url('./assets/images/inner-bg.png')
-  background-position: center
-  background-repeat: no-repeat
-  background-size: 100% 100%
+
+  &__item
+    display: block
+    padding: 15px 20px
+    background-image: url('./assets/images/chat-bg.png')
+    background-position: center
+    background-repeat: no-repeat
+    background-size: 100% 100%
+    font-size: $font-size + 2
+    font-weight: 600
+    color: $black
+
+    &:not(:last-child)
+      margin-bottom: 15px
+
+  &__btn.btn_text
+    padding-bottom: 0
+
+    &:after
+      content: none
+
+.inner
+  position: relative
+  display: flex
+  max-width: 790px
+  margin-left: auto
+  margin-right: auto
+  padding: 50px 15px
+
+  &:before,
+  &:after
+    position: absolute
+    left: 0
+    right: 0
+    width: 100%
+    height: 90px
+    background-position: center
+    background-repeat: no-repeat
+    background-size: 100% 100%
+    content: ''
+
+  &:before
+    top: 0
+    background-image: url('./assets/images/inner-top-bg.png')
+
+  &:after
+    bottom: 0
+    background-image: url('./assets/images/inner-bottom-bg.png')
 
   &_fluid
     max-width: 95%
 
   &__content
     flex-grow: 1
-    padding-left: 5.7971014%
-    padding-right: 5.7971014%
-    overflow-y: auto
+    padding: 50px
+    overflow: hidden
+    background-image: url('./assets/images/inner-bg.png')
+    background-position: center
+    background-repeat: no-repeat
+    background-size: 100% auto
+    transition: max-height 5s
 
-.btn-text
-  padding-left: 0
-  padding-right: 0
-  border: none
-  background-color: transparent
+    &_loading
+      max-height: 0vh
+      padding-bottom: 0
+      animation: loading 5s linear infinite alternate
 
-  &__icon
-    width: 24px
-    height: 24px
-    color: $black
+@keyframes loading
+  0%
+    max-height: 0vh
+
+  100%
+    max-height: 100vh
 
 </style>

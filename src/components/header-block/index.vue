@@ -8,14 +8,14 @@
         Btn(@click="isMobileMenuVisible = !isMobileMenuVisible")
           svgicon(:icon="isMobileMenuVisible ? 'cross' : 'burger'")
 
-        .header__mobile-content(v-show="isMobileMenuVisible")
-          Navigation
+      .header__content
+        Navigation.header__nav
 
-          Menu.header__mobile-menu
+        Menu.header__menu
 
-      Navigation.header__nav
+      //- Navigation.header__nav
 
-      Menu.header__menu
+      //- Menu.header__menu
 
 </template>
 
@@ -34,17 +34,10 @@ export default Vue.extend({
   data() {
     return {
       isMobileMenuVisible: false,
-      formType: '' as 'signin' | 'signup' | '',
     };
   },
 
   computed: mapGetters('auth', ['token']),
-
-  methods: {
-    showAuth(formType: 'signin' | 'signup'): void {
-      this.formType = this.formType !== formType ? formType : '';
-    },
-  },
 
   watch: {
     token: {
@@ -111,31 +104,36 @@ export default Vue.extend({
       top: 0
 
   &__nav
-    display: none
-
     +for-tablet-up
-      display: block
+      margin-left: auto
+      margin-right: auto
 
-  &__mobile-menu
+  &__menu
     display: flex
     flex-direction: column
 
-  &__menu
-    display: none
-
     +for-tablet-up
       position: relative
-      display: flex
+      flex-direction: row
       align-items: center
 
-  &__sign-up,
-  &__mobile-content
+  &__content
     position: absolute
     top: 100%
     right: -15px
     width: 320px
-    padding: 65% 10.9375%
+    padding: 30px 15px
     background-image: url('../../assets/images/inner-bg.png')
     background-size: 100% 100%
+
+    +for-tablet-up
+      position: relative
+      top: 0
+      right: 0
+      flex-grow: 1
+      display: flex
+      width: auto
+      padding: 0
+      background-image: none
 
 </style>
