@@ -18,7 +18,9 @@ export default Vue.extend({
   name: 'ChatList',
 
   props: {
-    chatList: Array as () => Array<{ id: string; login: string }>,
+    chatList: {
+      type: Array as () => Array<{ id: string; login: string }>,
+    },
   },
 });
 

@@ -14,7 +14,7 @@
       input#photo.sign-up__upload(
         name="photo"
         type="file"
-        accept="image/gif, image/jpeg, image/png"
+        accept="image/jpg, image/jpeg, image/png"
         @change="uploadFile"
       )
 
@@ -61,7 +61,7 @@ export default Vue.extend({
   props: {
     formType: {
       type: String as () => 'signin' | 'signup',
-      default: false,
+      default: '',
     },
   },
 
@@ -81,13 +81,15 @@ export default Vue.extend({
   methods: {
     ...mapActions('auth', ['signIn', 'signUp']),
 
-    async uploadFile({ target }: any) {
+    setImage({ target }: ProgressEvent<FileReader>): void {
+      this.userImg = target && target.result;
+    },
+
+    uploadFile({ target }: any) {
       if (target.files && target.files[0]) {
         const reader = new FileReader();
 
-        reader.onload = (e) => {
-          this.userImg = e.target && e.target.result;
-        };
+        reader.onload = this.setImage;
 
         reader.readAsDataURL(target.files[0]);
 

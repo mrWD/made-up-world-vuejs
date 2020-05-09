@@ -43,12 +43,6 @@ export default Vue.extend({
       this.srcData = DefaultImg;
     },
   },
-
-  watch: {
-    src(value) {
-      this.srcData = value;
-    },
-  },
 });
 
 </script>

@@ -13,10 +13,6 @@
 
         Menu.header__menu
 
-      //- Navigation.header__nav
-
-      //- Menu.header__menu
-
 </template>
 
 <script lang="ts">

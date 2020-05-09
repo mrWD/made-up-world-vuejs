@@ -1,5 +1,6 @@
 module.exports = {
   preset: '@vue/cli-plugin-unit-jest/presets/typescript-and-babel',
+  collectCoverage: true,
   coverageReporters: [
     'html',
     'text-summary',
@@ -8,31 +9,21 @@ module.exports = {
   collectCoverageFrom: [
     '**/*.{js,vue,ts}',
     '!**/node_modules/**',
-    '!src/main.ts',
-    '!src/App.vue',
-    '!src/**/*.d.*',
   ],
   coverageDirectory: '<rootDir>/tests/unit/coverage/',
   coveragePathIgnorePatterns: [
-    '<rootDir>/api-server.js',
     '<rootDir>/dist/',
     '<rootDir>/node_modules/',
-    '<rootDir>/src/constants/',
     '<rootDir>/.+\\.config\\.js$',
     '<rootDir>/tests/',
-    '<rootDir>/src/router.ts',
-    '<rootDir>/src/main.ts',
+    '<rootDir>/src/constants/',
     '<rootDir>/src/helpers/icons/',
-    '<rootDir>/src/pages/',
-    '<rootDir>/src/App.vue',
   ],
   moduleFileExtensions: [
     'js',
-    'jsx',
     'json',
     'vue',
     'ts',
-    'tsx',
   ],
   transform: {
     '^.+\\.vue$': 'vue-jest',

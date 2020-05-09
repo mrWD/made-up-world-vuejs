@@ -1,6 +1,6 @@
 <template lang="pug">
   .chat
-    Btn.chat__btn(@click="toggleChats")
+    Btn.chat__btn(@click="toggleChatList")
       svgicon(icon="chat")
 
     .chat__content(v-show="isChatVisisble")
@@ -15,7 +15,7 @@
       ChatList(
         :chatList="chatListWithLogin"
         @click="toggleChat"
-        @close="toggleChats"
+        @close="toggleChatList"
       )
 
 </template>
@@ -24,7 +24,8 @@
 import Vue from 'vue';
 import { mapGetters, mapActions } from 'vuex';
 
-const socket = new WebSocket(process.env.VUE_APP_CHAT_URL);
+import ChatList from './ChatList.vue';
+import MsgList from './MsgList.vue';
 
 export default Vue.extend({
   name: 'Chat',
@@ -34,7 +35,7 @@ export default Vue.extend({
       type: String,
     },
     authInfo: {
-      type: Object,
+      type: Object as () => ({ login: string }),
     },
   },
 
@@ -43,6 +44,7 @@ export default Vue.extend({
       isChatVisisble: false,
       message: null as string | null,
       chatID: '',
+      socket: new WebSocket(process.env.VUE_APP_CHAT_URL),
     };
   },
 
@@ -51,7 +53,7 @@ export default Vue.extend({
   methods: {
     ...mapActions('chats', ['getChatList', 'getMsgList', 'getMsg']),
 
-    toggleChats(): void {
+    toggleChatList(): void {
       this.isChatVisisble = !this.isChatVisisble;
     },
 
@@ -66,13 +68,13 @@ export default Vue.extend({
     },
 
     sendMessage(text: string): void {
-      if (!text) return;
-
-      socket.send(JSON.stringify({
-        chatID: this.chatID,
-        token: this.token,
-        text,
-      }));
+      if (text) {
+        this.socket.send(JSON.stringify({
+          chatID: this.chatID,
+          token: this.token,
+          text,
+        }));
+      }
     },
   },
 
@@ -94,14 +96,12 @@ export default Vue.extend({
   },
 
   mounted() {
-    socket.onmessage = (event) => {
-      this.getMsg(event);
-    };
+    this.socket.onmessage = this.getMsg;
   },
 
   components: {
-    ChatList: () => import('./ChatList.vue'),
-    MsgList: () => import('./MsgList.vue'),
+    ChatList,
+    MsgList,
   },
 });
 

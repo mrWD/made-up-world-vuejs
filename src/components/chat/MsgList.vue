@@ -7,11 +7,11 @@
 
     ul.msg-list__content(v-else)
       li.msg-list__item(
-        v-for="(msg, i) in msgList"
-        :class="{ 'chat__item_right': msg.login === authLogin }"
+        v-for="(item, i) in msgList"
+        :class="{ 'chat__item_right': item.login === authLogin }"
         :key="i"
       )
-        | {{ msg.text }}
+        | {{ item.text }}
 
     form.msg-list__form
       Field.msg-list__field(v-model="message" type="textarea" row="2")
@@ -31,7 +31,7 @@ export default Vue.extend({
       type: String,
     },
     msgList: {
-      type: Array as () => Array<{}>,
+      type: Array as () => Array<{ login: string; text: string }>,
     },
   },
 

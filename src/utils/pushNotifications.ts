@@ -54,6 +54,10 @@ const unsubscribeUser = async (sw: ServiceWorkerRegistration): Promise<void> => 
 };
 
 const pushNotification = async (token: string, isUnsubscribe = true): Promise<void> => {
+  if (!('Notification' in window) || !('serviceWorker' in navigator)) {
+    return;
+  }
+
   try {
     const sw = await navigator.serviceWorker.register('../service-worker.js');
 

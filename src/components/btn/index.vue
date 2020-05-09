@@ -1,8 +1,7 @@
 <template lang="pug" functional>
   button.btn(
     :class="[\
-      { 'btn_small': props.isSmall, 'btn_text': props.isText },\
-      ...(data.staticClass || []),\
+      { 'btn_small': props.isSmall, 'btn_text': props.isText }, ...data.staticClass,\
     ]"
     type="button"
     :disabled="props.disabled"
