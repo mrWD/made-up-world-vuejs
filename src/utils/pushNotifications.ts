@@ -58,16 +58,12 @@ const pushNotification = async (token: string, isUnsubscribe = true): Promise<vo
     return;
   }
 
-  try {
-    const sw = await navigator.serviceWorker.register('../service-worker.js');
+  const sw = await navigator.serviceWorker.register('../service-worker.js');
 
-    if (isUnsubscribe) {
-      subscribeUser(token, sw);
-    } else {
-      unsubscribeUser(sw);
-    }
-  } catch (err) {
-    console.error(err);
+  if (isUnsubscribe) {
+    subscribeUser(token, sw);
+  } else {
+    unsubscribeUser(sw);
   }
 };
 
