@@ -17,7 +17,7 @@ const page: Module<IPageState, IRootState> = {
   namespaced: true,
 
   state: {
-    pageList: null,
+    pageList: [],
   },
 
   actions: {
@@ -83,14 +83,9 @@ const page: Module<IPageState, IRootState> = {
     },
 
     [SAVE_PAGE](state, newPage: IPage) {
-      if (!state.pageList || !state.pageList[0]) {
-        state.pageList = [newPage];
-        return;
-      }
-
       const pageIndex = state.pageList.findIndex(({ pageId }) => pageId === newPage.pageId);
 
-      if (!pageIndex) {
+      if (pageIndex < 0) {
         state.pageList.push(newPage);
         return;
       }
@@ -100,7 +95,7 @@ const page: Module<IPageState, IRootState> = {
   },
 
   getters: {
-    pageList: ({ pageList }): IPage[] | null => pageList,
+    pageList: ({ pageList }): IPage[] => pageList,
   },
 };
 

@@ -20,7 +20,7 @@ const auth: Module<IAuthState, IRootState> = {
   },
 
   actions: {
-    async getAuthInfo({ commit, rootState }): Promise<void> {
+    async getAuthInfo({ commit }): Promise<void> {
       const token = localStorage.getItem(TOKEN);
 
       if (!token) return;

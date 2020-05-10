@@ -18,6 +18,13 @@ module.exports = {
     '<rootDir>/tests/',
     '<rootDir>/src/constants/',
     '<rootDir>/src/helpers/icons/',
+    '<rootDir>/src/router/',
+    '<rootDir>/src/store/index.ts',
+    '<rootDir>/src/views/',
+    '<rootDir>/src/App.vue',
+    '<rootDir>/src/main.ts',
+    '<rootDir>/src/registerServiceWorker.ts',
+    '<rootDir>/src/service-worker.js',
   ],
   moduleFileExtensions: [
     'js',

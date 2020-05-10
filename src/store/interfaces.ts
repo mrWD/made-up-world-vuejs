@@ -1,3 +1,14 @@
+export interface ChatListWithLogin {
+  id: string;
+  login: string;
+}
+
+export interface MsgListWithLogin {
+  text: string;
+  chatID: string;
+  login: string;
+}
+
 export interface IPage {
   id: string;
   pageId: string;
@@ -11,7 +22,7 @@ export interface IPage {
 }
 
 export interface IPageState {
-  pageList: IPage[] | null,
+  pageList: IPage[],
 }
 
 export interface IStory {
@@ -57,8 +68,8 @@ export interface IReqStatusState {
 
 export interface IChatState {
   currentChat: string | null;
-  chatList: IChat[] | null;
-  msgList: IMsg[] | null;
+  chatList: IChat[];
+  msgList: IMsg[];
 }
 
 export interface IUsersState {
@@ -71,6 +82,6 @@ export interface IUsersState {
 export interface IRootState {
   auth: IAuthState;
   users: IUsersState;
-  pageList: IPageState;
-  storyList: IStoryState;
+  pages: IPageState;
+  stories: IStoryState;
 }

@@ -9,7 +9,7 @@ import {
   UPDATE_REQUEST_COUNT,
   ADD_ERROR,
 } from '@/constants/story';
-import { IChatState, IRootState, IMsg } from '../interfaces';
+import { IChatState, IRootState, IMsg, ChatListWithLogin, MsgListWithLogin } from '../interfaces';
 
 const { VUE_APP_API_URL } = process.env;
 
@@ -18,8 +18,8 @@ const chats: Module<IChatState, IRootState> = {
 
   state: {
     currentChat: null,
-    chatList: null,
-    msgList: null,
+    chatList: [],
+    msgList: [],
   },
 
   actions: {
@@ -95,11 +95,6 @@ const chats: Module<IChatState, IRootState> = {
     },
 
     [GET_CHAT](state, chat) {
-      if (!state.chatList) {
-        state.chatList = [chat];
-        return;
-      }
-
       const stateChat = state.chatList.find(({ id }) => id === chat.id);
 
       if (!stateChat) {
@@ -114,30 +109,22 @@ const chats: Module<IChatState, IRootState> = {
     },
 
     [GET_MSG](state, newMsg) {
-      if (!state.msgList) {
-        state.msgList = [newMsg];
-      } else {
-        state.msgList.push(newMsg);
-      }
+      state.msgList.push(newMsg);
     },
   },
 
   getters: {
     currentChat: ({ currentChat }) => currentChat,
 
-    chatListWithLogin: ({ chatList }, _, { auth }): object[] | null => {
-      if (!chatList) {
-        return null;
-      }
-
-      return chatList.map(({ id, members }) => {
+    chatListWithLogin: ({ chatList }, _, { auth }): ChatListWithLogin[] => (
+      chatList.map(({ id, members }) => {
         const member = members.find(({ login }) => login !== auth.authInfo?.login);
 
-        return { id, login: member?.login };
-      });
-    },
+        return { id, login: member?.login || '' };
+      })
+    ),
 
-    msgListWithLogin: ({ msgList }): object[] | null => msgList && msgList
+    msgListWithLogin: ({ msgList }): MsgListWithLogin[] => msgList
       .map(({ text, chatID, author }) => ({ text, chatID, login: author.login })),
   },
 };

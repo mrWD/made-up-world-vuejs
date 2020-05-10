@@ -14,7 +14,7 @@ import { IStory, IStoryState, IRootState } from '../interfaces';
 
 const { VUE_APP_API_URL } = process.env;
 
-const page: Module<IStoryState, IRootState> = {
+const stories: Module<IStoryState, IRootState> = {
   namespaced: true,
 
   state: {
@@ -164,4 +164,4 @@ const page: Module<IStoryState, IRootState> = {
   },
 };
 
-export default page;
+export default stories;

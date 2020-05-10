@@ -34,10 +34,6 @@ const requestStatus: Module<IReqStatusState, IRootState> = {
       errorsSet.add(err);
 
       state.errors = [...errorsSet];
-
-      setTimeout(() => {
-        state.errors = state.errors.filter((item) => item !== err);
-      }, 5000);
     },
 
     [REMOVE_ERROR](state, err) {
