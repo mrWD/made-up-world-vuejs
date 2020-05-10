@@ -1,23 +1,19 @@
 language: node_js
 node_js:
-  - 12
-
+- 12
 os: linux
-
+dist: xenial
 branches:
   only:
-    - master
-
+  - master
 jobs:
   include:
-    - stage: test
-      script:
-        - yarn test:unit
-
-
-
+  - stage: test
+    script:
+    - yarn test:unit
 deploy:
   provider: heroku
   app: made-up-world-vuejs
+  strategy: api
   api_key:
-    secure: 5db91f53-02fa-40b9-ac52-c6942dbe8e75
+    secure: hBkjTq7k0Y2O78VJ8+hBmyrBwMlBcOEMenA5yuXg6j8mabTMqPKo32OPGZzWyg65GGObBe4TXm47XSooeCYG3LVHhMrAceEqPcY/RsndVp7resKU14SULkmO+VvpqWpZM15nZyUmSpYbceQ/r0DqqsLCb0B1M0cfxaA13jOQSjcuL8s4JsnC7Zu3++kYXsuPKK7psQks6N/ZgPnf0sfBp8WW9B74fx4N8Qf3TipLDDEqGpwh28H5a+e7ywOCo89JveT1hXJBH5GRRSRZgW/D3QJ8hmen1tyD7bDgIIt8dOdKo0HJFgn1XlI0EYlv1XbnSdYxzyRMN0P33Goo33qfSEBfdGHOd8Z2YSsWkmC/JNA0jo6COd5HDIy6hcBF5W0ELBRbgLA2+vIq7CTZkbdLInKgJkgiaRcncSdgkuXnYffuzlMsTTE/YAjZITa+BkwjWu3HtRjvgP64miToI/Fl128whRSqmo4r+Hs2hsaHbkZ93wIZUUHsVtJQDvzujoM9tOmDv+uA8478b2DD5ZwFA+GvIDoR/5PGl7ph69Ttp16ftdVrwYr+WeSjCTey0+OW1rnA77SNAPn8hy2+nJbaKrIiKmskdCxKfOrXncLgZtqcdkd5ntD/BTxN1fquYaYEtirjACcxVOFofH/j0Lt3WKxdLmFRo2fBJr9WYMhO1/g=
