@@ -53,7 +53,7 @@ const auth: Module<IAuthState, IRootState> = {
 
         await axios.post(`${VUE_APP_API_URL}/upload/image`, formData, {
           headers: {
-            'Content-type': 'multipart/form-data; charset=utf8; boundary="--Boundary-8F6C36F3-A273-4FF8-AED2-1098C7C5BD87"--Boundary-8F6C36F3-A273-4FF8-AED2-1098C7C5BD87',
+            'Content-type': 'multipart/form-data; charset=utf8;',
           },
         });
       } catch (err) {

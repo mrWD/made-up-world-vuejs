@@ -21,39 +21,50 @@ jest.mock('axios', () => ({
   }),
 }));
 
-const errorCommitTest = async (actionName: string, commit: jest.Mock<any, any>, args?: any) => {
-  (axios.post as any).mockRejectedValueOnce(new Error('Some error!'));
-
-  await (stories.actions as any)[actionName]({ commit }, args);
-
-  expect(commit)
-    .toHaveBeenCalledWith(ADD_ERROR, 'Problems with grabbing the page!', { root: true });
-};
-
-const updateRequestCommitTest =
-  async (actionName: string, commit: jest.Mock<any, any>, args?: any) => {
-    await (stories.actions as any)[actionName]({ commit }, args);
-
-    expect(commit).toHaveBeenNthCalledWith(1, UPDATE_REQUEST_COUNT, true, { root: true });
-    expect(commit).toHaveBeenCalledWith(UPDATE_REQUEST_COUNT, false, { root: true });
-  };
-
 describe('store.stories.actions', () => {
   const { actions } = stories;
-  const token = 'test-token';
   let commit = jest.fn();
+
+  const errorCommitTest = async (actionName: string, commit: jest.Mock<any, any>, args?: any) => {
+    (axios.post as any).mockRejectedValueOnce(new Error('Some error!'));
+
+    await (actions as any)[actionName]({ commit }, args);
+
+    expect(commit)
+      .toHaveBeenCalledWith(ADD_ERROR, 'Problems with grabbing the page!', { root: true });
+  };
+
+  const updateRequestCommitTest =
+    async (actionName: string, commit: jest.Mock<any, any>, args?: any) => {
+      await (actions as any)[actionName]({ commit }, args);
+
+      expect(commit).toHaveBeenNthCalledWith(1, UPDATE_REQUEST_COUNT, true, { root: true });
+      expect(commit).toHaveBeenCalledWith(UPDATE_REQUEST_COUNT, false, { root: true });
+    };
 
   describe('getStoryList', () => {
     beforeEach(() => {
       commit.mockClear();
-      localStorage.setItem(TOKEN, token);
+      localStorage.setItem(TOKEN, 'test-token');
     });
 
     it('always calls commit with UPDATE_REQUEST_COUNT 2 times', async () => {
       await updateRequestCommitTest('getStoryList', commit);
     });
 
-    it('calls the second commit with ADD_ERROR if recieve data is error', async () => {
+    it('sends empty headers if localStorage[TOKEN] is empty', async () => {
+      localStorage.removeItem(TOKEN);
+
+      await (actions as any).getStoryList({ commit }, { bodyData: 'test data' });
+
+      expect(axios.post).toHaveBeenCalledWith(
+        `${process.env.VUE_APP_API_URL}/reading/all`,
+        { bodyData: 'test data' },
+        { headers: {} },
+      );
+    });
+
+    it('calls the second commit with ADD_ERROR if recieved data is error', async () => {
       await errorCommitTest('getStoryList', commit);
     });
   });
@@ -61,14 +72,13 @@ describe('store.stories.actions', () => {
   describe('getStory', () => {
     beforeEach(() => {
       commit.mockClear();
-      localStorage.setItem(TOKEN, token);
     });
 
     it('always calls commit with UPDATE_REQUEST_COUNT 2 times', async () => {
       await updateRequestCommitTest('getStory', commit, { storyURL: 'testUrl', pageId: 'testId' });
     });
 
-    it('calls the second commit with ADD_ERROR if recieve data is error', async () => {
+    it('calls the second commit with ADD_ERROR if recieved data is error', async () => {
       await errorCommitTest('getStory', commit, { storyURL: 'testUrl', pageId: 'testId' });
     });
   });
@@ -76,14 +86,13 @@ describe('store.stories.actions', () => {
   describe('getAllPages', () => {
     beforeEach(() => {
       commit.mockClear();
-      localStorage.setItem(TOKEN, token);
     });
 
     it('always calls commit with UPDATE_REQUEST_COUNT 2 times', async () => {
       await updateRequestCommitTest('getAllPages', commit);
     });
 
-    it('calls the second commit with ADD_ERROR if recieve data is error', async () => {
+    it('calls the second commit with ADD_ERROR if recieved data is error', async () => {
       await errorCommitTest('getAllPages', commit);
     });
   });
@@ -91,14 +100,13 @@ describe('store.stories.actions', () => {
   describe('saveStory', () => {
     beforeEach(() => {
       commit.mockClear();
-      localStorage.setItem(TOKEN, token);
     });
 
     it('always calls commit with UPDATE_REQUEST_COUNT 2 times', async () => {
       await updateRequestCommitTest('saveStory', commit);
     });
 
-    it('calls the second commit with ADD_ERROR if recieve data is error', async () => {
+    it('calls the second commit with ADD_ERROR if recieved data is error', async () => {
       await errorCommitTest('saveStory', commit);
     });
   });
@@ -106,14 +114,13 @@ describe('store.stories.actions', () => {
   describe('removeStory', () => {
     beforeEach(() => {
       commit.mockClear();
-      localStorage.setItem(TOKEN, token);
     });
 
     it('always calls commit with UPDATE_REQUEST_COUNT 2 times', async () => {
       await updateRequestCommitTest('removeStory', commit);
     });
 
-    it('calls the second commit with ADD_ERROR if recieve data is error', async () => {
+    it('calls the second commit with ADD_ERROR if recieved data is error', async () => {
       await errorCommitTest('removeStory', commit);
     });
   });
@@ -121,14 +128,13 @@ describe('store.stories.actions', () => {
   describe('publishStory', () => {
     beforeEach(() => {
       commit.mockClear();
-      localStorage.setItem(TOKEN, token);
     });
 
     it('always calls commit with UPDATE_REQUEST_COUNT 2 times', async () => {
       await updateRequestCommitTest('publishStory', commit);
     });
 
-    it('calls the second commit with ADD_ERROR if recieve data is error', async () => {
+    it('calls the second commit with ADD_ERROR if recieved data is error', async () => {
       await errorCommitTest('publishStory', commit);
     });
   });
@@ -136,14 +142,13 @@ describe('store.stories.actions', () => {
   describe('unpublishStory', () => {
     beforeEach(() => {
       commit.mockClear();
-      localStorage.setItem(TOKEN, token);
     });
 
     it('always calls commit with UPDATE_REQUEST_COUNT 2 times', async () => {
       await updateRequestCommitTest('unpublishStory', commit);
     });
 
-    it('calls the second commit with ADD_ERROR if recieve data is error', async () => {
+    it('calls the second commit with ADD_ERROR if recieved data is error', async () => {
       await errorCommitTest('unpublishStory', commit);
     });
   });

@@ -20,6 +20,7 @@ module.exports = {
     '<rootDir>/src/helpers/icons/',
     '<rootDir>/src/router/',
     '<rootDir>/src/store/index.ts',
+    '<rootDir>/src/utils/',
     '<rootDir>/src/views/',
     '<rootDir>/src/App.vue',
     '<rootDir>/src/main.ts',

@@ -118,9 +118,10 @@ const chats: Module<IChatState, IRootState> = {
 
     chatListWithLogin: ({ chatList }, _, { auth }): ChatListWithLogin[] => (
       chatList.map(({ id, members }) => {
-        const member = members.find(({ login }) => login !== auth.authInfo?.login);
+        const member = members
+          .find(({ login }) => login !== auth.authInfo?.login) as { login: string };
 
-        return { id, login: member?.login || '' };
+        return { id, login: member.login };
       })
     ),
 

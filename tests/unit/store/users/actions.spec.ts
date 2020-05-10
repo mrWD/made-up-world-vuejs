@@ -18,34 +18,34 @@ jest.mock('axios', () => ({
   }),
 }));
 
-const errorCommitTest = async (actionName: string, commit: jest.Mock<any, any>) => {
-  (axios.post as any).mockRejectedValueOnce(new Error('Some error!'));
-
-  await (users.actions as any)[actionName]({ commit });
-
-  expect(commit)
-    .toHaveBeenCalledWith(ADD_ERROR, 'Problems with grabbing the page!', { root: true });
-};
-
-const updateRequestCommitTest = async (actionName: string, commit: jest.Mock<any, any>) => {
-  await (users.actions as any)[actionName]({ commit });
-
-  expect(commit).toHaveBeenNthCalledWith(1, UPDATE_REQUEST_COUNT, true, { root: true });
-  expect(commit).toHaveBeenCalledWith(UPDATE_REQUEST_COUNT, false, { root: true });
-};
-
-const emptyTokenTest = async (actionName: string, commit: jest.Mock<any, any>) => {
-  localStorage.removeItem(TOKEN);
-
-  await (users.actions as any)[actionName]({ commit });
-
-  expect(commit).not.toHaveBeenCalled();
-};
-
 describe('store.users.actions', () => {
   const { actions } = users;
   const token = 'test-token';
   let commit = jest.fn();
+
+  const errorCommitTest = async (actionName: string, commit: jest.Mock<any, any>) => {
+    (axios.post as any).mockRejectedValueOnce(new Error('Some error!'));
+  
+    await (actions as any)[actionName]({ commit });
+  
+    expect(commit)
+      .toHaveBeenCalledWith(ADD_ERROR, 'Problems with grabbing the page!', { root: true });
+  };
+  
+  const updateRequestCommitTest = async (actionName: string, commit: jest.Mock<any, any>) => {
+    await (actions as any)[actionName]({ commit });
+  
+    expect(commit).toHaveBeenNthCalledWith(1, UPDATE_REQUEST_COUNT, true, { root: true });
+    expect(commit).toHaveBeenCalledWith(UPDATE_REQUEST_COUNT, false, { root: true });
+  };
+  
+  const emptyTokenTest = async (actionName: string, commit: jest.Mock<any, any>) => {
+    localStorage.removeItem(TOKEN);
+  
+    await (actions as any)[actionName]({ commit });
+  
+    expect(commit).not.toHaveBeenCalled();
+  };
 
   describe('getUserInfo', () => {
     beforeEach(() => {
@@ -57,7 +57,7 @@ describe('store.users.actions', () => {
       await updateRequestCommitTest('getUserInfo', commit);
     });
 
-    it('calls the second commit with ADD_ERROR if recieve data is error', async () => {
+    it('calls the second commit with ADD_ERROR if recieved data is error', async () => {
       await errorCommitTest('getUserInfo', commit);
     });
   });
@@ -72,7 +72,7 @@ describe('store.users.actions', () => {
       await updateRequestCommitTest('getUserList', commit);
     });
 
-    it('calls the second commit with ADD_ERROR if recieve data is error', async () => {
+    it('calls the second commit with ADD_ERROR if recieved data is error', async () => {
       await errorCommitTest('getUserList', commit);
     });
   });
@@ -91,7 +91,7 @@ describe('store.users.actions', () => {
       await updateRequestCommitTest('follow', commit);
     });
 
-    it('calls the second commit with ADD_ERROR if recieve data is error', async () => {
+    it('calls the second commit with ADD_ERROR if recieved data is error', async () => {
       await errorCommitTest('follow', commit);
     });
   });
@@ -110,7 +110,7 @@ describe('store.users.actions', () => {
       await updateRequestCommitTest('unfollow', commit);
     });
 
-    it('calls the second commit with ADD_ERROR if recieve data is error', async () => {
+    it('calls the second commit with ADD_ERROR if recieved data is error', async () => {
       await errorCommitTest('unfollow', commit);
     });
   });
