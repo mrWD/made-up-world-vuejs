@@ -11,9 +11,6 @@ jobs:
     - stage: test
       script:
         - yarn test:unit
-    - stage: build
-      script:
-        - yarn build
 
 deploy:
   provider: heroku
