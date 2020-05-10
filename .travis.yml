@@ -1,9 +1,5 @@
-sudo: false
-
-language: node_js
-node_js:
-  - 9
-
-branches:
-  only:
-    - master
+deploy:
+  provider: heroku
+  app: made-up-world-vuejs
+  api_key:
+    secure: 5db91f53-02fa-40b9-ac52-c6942dbe8e75
