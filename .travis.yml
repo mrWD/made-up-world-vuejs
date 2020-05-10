@@ -2,6 +2,8 @@ language: node_js
 node_js:
   - 12
 
+os: linux
+
 branches:
   only:
     - master
@@ -11,6 +13,8 @@ jobs:
     - stage: test
       script:
         - yarn test:unit
+
+
 
 deploy:
   provider: heroku
