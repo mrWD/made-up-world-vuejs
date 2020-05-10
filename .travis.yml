@@ -4,12 +4,6 @@ language: node_js
 node_js:
   - 12
 
-env:
-  - VUE_APP_API_URL=http://localhost:5000/api
-  - VUE_APP_CHAT_URL=ws://192.168.0.48:5000
-  - VUE_APP_VAPID_KEY=BF8yGRH7Oz-7zHkprFcql09k9LKMCDcmFHGRafQP5mS1s68jgtADxb7Pooo9MVkNuqQClu_4wqtNSvA5N1lgfuw
-
-
 branches:
   only:
     - master
