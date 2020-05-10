@@ -9,7 +9,12 @@ import {
   UPDATE_REQUEST_COUNT,
   ADD_ERROR,
 } from '@/constants/story';
-import { IChatState, IRootState, IMsg, ChatListWithLogin, MsgListWithLogin } from '../interfaces';
+import {
+  IChatState,
+  IRootState,
+  ChatListWithLogin,
+  MsgListWithLogin,
+} from '../interfaces';
 
 const { VUE_APP_API_URL } = process.env;
 
