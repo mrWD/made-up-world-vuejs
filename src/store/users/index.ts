@@ -8,6 +8,8 @@ import {
   GET_IMAGE_DESTINATION,
   TOKEN,
   UPDATE_REQUEST_COUNT,
+  ADD_FOLLOWING,
+  REMOVE_FOLLOWING,
 } from '@/constants/story';
 import { IUsersState, IRootState } from '../interfaces';
 
@@ -22,6 +24,8 @@ const users: Module<IUsersState, IRootState> = {
     destination: '',
     pageNumber: 1,
     pageCount: 0,
+    newFollowings: [],
+    newUnfollowings: [],
   },
 
   actions: {
@@ -68,6 +72,8 @@ const users: Module<IUsersState, IRootState> = {
         await axios.post(`${VUE_APP_API_URL}/users/follow`, { login }, {
           headers: { Authorization: token },
         });
+
+        commit(ADD_FOLLOWING, login);
       } catch (err) {
         dispatch('addError', 'Problems with grabbing the page!', { root: true });
       } finally {
@@ -86,6 +92,8 @@ const users: Module<IUsersState, IRootState> = {
         await axios.post(`${VUE_APP_API_URL}/users/unfollow`, { login }, {
           headers: { Authorization: token },
         });
+
+        commit(REMOVE_FOLLOWING, login);
       } catch (err) {
         dispatch('addError', 'Problems with grabbing the page!', { root: true });
       } finally {
@@ -101,11 +109,21 @@ const users: Module<IUsersState, IRootState> = {
     [GET_PAGE_COUNT](state, pageCount) {
       state.pageCount = pageCount;
     },
-    [GET_USER_INFO](state, userInfo: object | null) {
+    [GET_USER_INFO](state, userInfo) {
       state.userInfo = userInfo;
     },
-    [GET_USER_LIST](state, userList: object[] | null) {
+    [GET_USER_LIST](state, userList) {
       state.userList = userList;
+    },
+    [ADD_FOLLOWING](state, login) {
+      state.newFollowings.push(login);
+
+      state.newUnfollowings.splice(state.newUnfollowings.indexOf(login), 1);
+    },
+    [REMOVE_FOLLOWING](state, login) {
+      state.newUnfollowings.push(login);
+
+      state.newFollowings.splice(state.newFollowings.indexOf(login), 1);
     },
     [GET_IMAGE_DESTINATION](state, destination) {
       state.destination = `${VUE_APP_API_URL}/${destination}`;
@@ -113,11 +131,13 @@ const users: Module<IUsersState, IRootState> = {
   },
 
   getters: {
-    userInfo: ({ userInfo }): object | null => userInfo,
-    userList: ({ userList }): object[] | null => userList,
-    destination: ({ destination }): string => destination,
-    pageNumber: ({ pageNumber }): number => pageNumber,
-    pageCount: ({ pageCount }): number => pageCount,
+    userInfo: ({ userInfo }) => userInfo,
+    userList: ({ userList }) => userList,
+    newFollowings: ({ newFollowings }) => newFollowings,
+    newUnfollowings: ({ newUnfollowings }) => newUnfollowings,
+    destination: ({ destination }) => destination,
+    pageNumber: ({ pageNumber }) => pageNumber,
+    pageCount: ({ pageCount }) => pageCount,
   },
 };
 

@@ -19,6 +19,8 @@ describe('store.requestStatus.getters', () => {
       destination: '',
       pageNumber: 0,
       pageCount: 0,
+      newFollowings: [],
+      newUnfollowings: [],
     },
     pages: {
       pageList: [],

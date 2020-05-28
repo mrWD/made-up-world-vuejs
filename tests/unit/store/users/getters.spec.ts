@@ -18,6 +18,8 @@ describe('store.users.getters', () => {
       destination: '',
       pageNumber: 0,
       pageCount: 0,
+      newFollowings: [],
+      newUnfollowings: [],
     },
     pages: {
       pageList: [],
@@ -46,6 +48,8 @@ describe('store.users.getters', () => {
     destination: '',
     pageNumber: 0,
     pageCount: 0,
+    newFollowings: [],
+    newUnfollowings: [],
   };
 
   it('userInfo returns state.userInfo', () => {

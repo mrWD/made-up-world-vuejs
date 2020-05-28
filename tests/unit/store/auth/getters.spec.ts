@@ -19,6 +19,8 @@ describe('store.auth.getters', () => {
       userInfo: null,
       userList: null,
       destination: '',
+      newFollowings: [],
+      newUnfollowings: [],
       pageNumber: 0,
       pageCount: 0,
     },

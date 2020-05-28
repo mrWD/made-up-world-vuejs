@@ -18,6 +18,8 @@ describe('store.stories.getters', () => {
       destination: '',
       pageNumber: 0,
       pageCount: 0,
+      newFollowings: [],
+      newUnfollowings: [],
     },
     pages: {
       pageList: [],
@@ -53,6 +55,8 @@ describe('store.stories.getters', () => {
       },
     ],
     pageList: null,
+    newFollowings: [],
+    newUnfollowings: [],
     pageNumber: 0,
     pageCount: 0,
   };

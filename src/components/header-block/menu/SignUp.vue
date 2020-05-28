@@ -70,7 +70,7 @@ export default Vue.extend({
       userImg: null as ArrayBuffer | string | null,
 
       form: {
-        file: null,
+        file: null as File | null,
         login: null,
         password: null,
         passwordConfirm: null,
@@ -85,7 +85,7 @@ export default Vue.extend({
       this.userImg = target && target.result;
     },
 
-    uploadFile({ target }: any) {
+    uploadFile({ target }: { target: HTMLInputElement }) {
       if (target.files && target.files[0]) {
         const reader = new FileReader();
 

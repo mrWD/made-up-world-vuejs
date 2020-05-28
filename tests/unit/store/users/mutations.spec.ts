@@ -20,6 +20,8 @@ describe('store.users.mutations', () => {
       pageNumber: 0,
       pageCount: 0,
       destination: '',
+      newFollowings: [],
+      newUnfollowings: [],
       userInfo: null,
       userList: null,
     };

@@ -6,30 +6,30 @@
 
     span(v-if="!userList") No users
 
-    .user-list__container(v-else)
-      .user-list__item(
-        v-for="(user, i) in userList"
-        v-if="!authInfo || isNotUser(user.login)"
+    ul.user-list__container(v-else)
+      li.user-list__item(
+        v-for="(item, i) in userList"
+        v-if="!authInfo || isNotUser(item.login)"
         :key="i"
       )
-        router-link.user-list__link(:to="{ name: 'User', params: { id: user.login } }")
+        router-link.user-list__link(:to="{ name: 'User', params: { id: item.login } }")
           Photo.user-list__photo(
-            :src="`${destination}/${user.photo}`"
-            :alt="user.login"
+            :src="`${destination}/${item.photo}`"
+            :alt="item.login"
             width="50"
             height="50"
           )
 
-          span.user-list__text {{ user.login }}
+          span.user-list__text {{ item.login }}
 
         Btn.user-list__btn(
-          v-if="isFollowed(user.followers)"
+          v-if="isFollowed(item)"
           isSmall
-          @click="follow(user.login)"
+          @click="follow(item.login)"
         )
           svgicon(icon="follow")
 
-        Btn.user-list__btn(v-if="authInfo" isSmall @click="getChatByRecipient(user.id)")
+        Btn.user-list__btn(v-if="authInfo" isSmall @click="getChatByRecipient(item.id)")
           svgicon(icon="msg")
 
     Pagination(
@@ -49,6 +49,11 @@ import Pagination from '@/components/pagination/index.vue';
 
 import Filters from './Filters.vue';
 
+interface UserInfo {
+  login: string;
+  followers: Array<{ login: string }>;
+}
+
 export default Vue.extend({
   name: 'UserList',
 
@@ -58,6 +63,8 @@ export default Vue.extend({
       destination: 'users/destination',
       pageNumber: 'users/pageNumber',
       pageCount: 'users/pageCount',
+      newFollowings: 'users/newFollowings',
+      newUnfollowings: 'users/newUnfollowings',
       authInfo: 'auth/authInfo',
     }),
   },
@@ -69,10 +76,13 @@ export default Vue.extend({
       getChatByRecipient: 'chats/getChatByRecipient',
     }),
 
-    isFollowed(followers: { login: string }[]): boolean {
-      if (!this.authInfo || !this.authInfo.login) return false;
+    isFollowed({ followers, login }: UserInfo): boolean {
+      const isNewFollowing = this.newFollowings.indexOf(login) > -1;
+      const isNewUnollowing = this.newUnfollowings.indexOf(login) > -1;
 
-      return followers.every(({ login }: { login: string }) => this.isNotUser(login));
+      if (!this.authInfo || !this.authInfo.login || isNewFollowing) return false;
+
+      return isNewUnollowing || followers.every((item) => this.isNotUser(item.login));
     },
 
     isNotUser(login: string): boolean {

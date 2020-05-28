@@ -3,7 +3,7 @@
     h2.list__title {{ title }} ({{ list.length }})
 
     ul.list__content(v-if="list && list[0]")
-      li.list__item(v-for="(item, i) in list" :key="i")
+      li.list__item(v-for="(item, i) in list.slice(0, maxLength)" :key="i")
         router-link.list__link(
           :to="{ name: routeName, params: { id: item[routeProp] } }"
         )
@@ -91,8 +91,10 @@ export default Vue.extend({
 
   &__link
     font-size: $font-size + 6
-    text-transform: capitalize
     text-decoration: none
     color: $black
+
+    &:not(:last-child)
+      margin-right: 10px
 
 </style>

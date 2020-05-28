@@ -108,13 +108,11 @@ export default Vue.extend({
 
   &__name
     font-size: $font-size + 11
-    text-transform: capitalize
     text-decoration: none
     color: $black
 
   &__author
     font-size: $font-size + 2
-    text-transform: capitalize
     text-decoration: none
     color: $black
 

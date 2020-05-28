@@ -116,7 +116,7 @@ $horizontal-indent: 30px
   bottom: 40px
   right: 40px
 
-  &__btn
+  &__btn.btn
     border-radius: 50%
 
   &__content

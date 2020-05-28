@@ -136,11 +136,14 @@ ul
 
   &__content
     flex-grow: 1
-    padding: 80px 50px
+    padding-top: 60px
+    padding-bottom: 80px
+    padding-left: 50px
+    padding-right: 50px
     overflow: hidden
     background-image: url('./assets/images/inner-bg.png')
-    background-position: center
-    background-repeat: no-repeat
+    background-position: top center
+    background-repeat: repeat-y
     background-size: 100% auto
     transition: max-height 5s
 

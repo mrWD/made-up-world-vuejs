@@ -104,6 +104,12 @@ interface User { login: string }
 export default Vue.extend({
   name: 'User',
 
+  data() {
+    return {
+      isFollowRequested: false,
+    };
+  },
+
   props: {
     isOwner: {
       type: Boolean,
@@ -115,8 +121,12 @@ export default Vue.extend({
     ...mapGetters({
       userInfo: 'users/userInfo',
       destination: 'users/destination',
+      newFollowings: 'users/newFollowings',
+      newUnfollowings: 'users/newUnfollowings',
       authInfo: 'auth/authInfo',
       storyList: 'stories/storyList',
+      isLoading: 'isLoading',
+      errors: 'errors',
     }),
 
     isUser(): boolean {
@@ -124,7 +134,10 @@ export default Vue.extend({
     },
 
     isFollowed(): boolean {
-      return this.userInfo.followers?.some(({ login }: User) => this.checkLogin(login));
+      const isNewFollowing = this.newFollowings.indexOf(this.userInfo.login) > -1;
+
+      return isNewFollowing
+        || this.userInfo.followers?.some(({ login }: User) => this.checkLogin(login));
     },
 
     isFollower(): boolean {
@@ -157,7 +170,11 @@ export default Vue.extend({
     },
 
     isFollowedFilter(userList: User[], user: User): boolean {
-      return userList.some(({ login }) => login !== user.login);
+      const isNewFollowing = this.newFollowings.indexOf(user.login) !== -1;
+      const isNewUnfollowing = this.newUnfollowings.indexOf(user.login) !== -1;
+
+      return isNewUnfollowing
+        || (!isNewFollowing && !userList.some(({ login }) => login === user.login));
     },
   },
 
@@ -223,9 +240,11 @@ export default Vue.extend({
     display: flex
     flex-direction: column
     align-items: center
+    padding-top: 15px
 
   &__btn
     &:not(:last-child)
       margin-bottom: 15px
+      margin-right: 10px
 
 </style>

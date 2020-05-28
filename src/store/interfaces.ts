@@ -78,6 +78,8 @@ export interface IUsersState {
   destination: string;
   pageNumber: number;
   pageCount: number;
+  newFollowings: string[];
+  newUnfollowings: string[];
 }
 
 export interface IRootState {
