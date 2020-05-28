@@ -19,6 +19,7 @@ describe('store.users.mutations', () => {
     state = {
       pageNumber: 0,
       pageCount: 0,
+      destination: '',
       userInfo: null,
       userList: null,
     };

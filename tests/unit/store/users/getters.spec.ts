@@ -15,6 +15,7 @@ describe('store.users.getters', () => {
     users: {
       userInfo: null,
       userList: null,
+      destination: '',
       pageNumber: 0,
       pageCount: 0,
     },
@@ -42,6 +43,7 @@ describe('store.users.getters', () => {
         login: 'User2',
       },
     ],
+    destination: '',
     pageNumber: 0,
     pageCount: 0,
   };

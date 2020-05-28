@@ -16,6 +16,7 @@ describe('store.requestStatus.getters', () => {
     users: {
       userInfo: null,
       userList: null,
+      destination: '',
       pageNumber: 0,
       pageCount: 0,
     },

@@ -15,6 +15,7 @@ describe('store.page.getters', () => {
     users: {
       userInfo: null,
       userList: null,
+      destination: '',
       pageNumber: 0,
       pageCount: 0,
     },
