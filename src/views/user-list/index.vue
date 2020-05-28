@@ -77,8 +77,8 @@ export default Vue.extend({
     }),
 
     isFollowed({ followers, login }: UserInfo): boolean {
-      const isNewFollowing = this.newFollowings.indexOf(login) > -1;
-      const isNewUnollowing = this.newUnfollowings.indexOf(login) > -1;
+      const isNewFollowing = this.newFollowings.includes(login);
+      const isNewUnollowing = this.newUnfollowings.includes(login);
 
       if (!this.authInfo || !this.authInfo.login || isNewFollowing) return false;
 

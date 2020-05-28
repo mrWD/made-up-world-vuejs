@@ -37,14 +37,16 @@
       )
         template(v-if="isUser" slot-scope="{ slotData }")
           Btn.user__btn(isSmall @click="togglePublishment(slotData)")
-            svgicon(:icon="slotData.isPublished ? 'hide' : 'show'")
+            svgicon(v-if="checkPublishing(slotData)" icon="hide")
+
+            svgicon(v-else icon="show")
 
           router-link.btn.btn_small.user__btn(
             :to="{ name: 'EditStory', params: { id: slotData.storyURL } }"
           )
             svgicon(icon="edit")
 
-          Btn.user__btn(isSmall @click="removeStory(pageList[0].storyURL)")
+          Btn.user__btn(isSmall @click="removeStory(slotData.storyURL)")
             svgicon(icon="cross")
 
       List(
@@ -64,7 +66,7 @@
             svgicon(icon="msg")
 
           Btn.user__btn(
-            v-if="isUser && newUnfollowings.indexOf(slotData.login) === -1"
+            v-if="isUser && !newUnfollowings.includes(slotData.login)"
             isSmall
             @click="unfollow(slotData.login)"
           )
@@ -105,6 +107,11 @@ import List from './List.vue';
 
 interface User { login: string }
 
+interface Story {
+  isPublished: boolean;
+  storyURL: string;
+}
+
 export default Vue.extend({
   name: 'User',
 
@@ -129,6 +136,8 @@ export default Vue.extend({
       newUnfollowings: 'users/newUnfollowings',
       authInfo: 'auth/authInfo',
       storyList: 'stories/storyList',
+      newPublishings: 'stories/newPublishings',
+      newUnpublishings: 'stories/newUnpublishings',
       isLoading: 'isLoading',
       errors: 'errors',
     }),
@@ -138,7 +147,7 @@ export default Vue.extend({
     },
 
     isFollowed(): boolean {
-      const isNewFollowing = this.newFollowings.indexOf(this.userInfo.login) > -1;
+      const isNewFollowing = this.newFollowings.includes(this.userInfo.login);
 
       return isNewFollowing
         || this.userInfo.followers?.some(({ login }: User) => this.checkLogin(login));
@@ -166,7 +175,7 @@ export default Vue.extend({
     },
 
     togglePublishment(storyInfo: IStory): void {
-      if (storyInfo.isPublished) {
+      if (this.checkPublishing(storyInfo)) {
         this.unpublishStory(storyInfo.storyURL);
       } else {
         this.publishStory(storyInfo.storyURL);
@@ -174,10 +183,17 @@ export default Vue.extend({
     },
 
     isFollowedFilter(userList: User[], user: User): boolean {
-      const isNewFollowing = this.newFollowings.indexOf(user.login) !== -1;
+      const isNewFollowing = this.newFollowings.includes(user.login);
       const isOldFollowing = !userList.some(({ login }) => login === user.login);
 
       return !isNewFollowing && isOldFollowing;
+    },
+
+    checkPublishing(story: Story): boolean {
+      const isNewPublishing = this.newPublishings.includes(story.storyURL);
+      const isNewUnpublishing = this.newUnpublishings.includes(story.storyURL);
+
+      return isNewPublishing || (!isNewUnpublishing && story.isPublished);
     },
   },
 

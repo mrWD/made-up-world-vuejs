@@ -28,6 +28,8 @@ describe('store.users.getters', () => {
       currentStory: null,
       storyList: [],
       pageList: [],
+      newPublishings: [],
+      newUnpublishings: [],
       pageNumber: 0,
       pageCount: 0,
     },

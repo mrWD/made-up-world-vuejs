@@ -6,10 +6,12 @@ import {
   GET_ALL_PAGES,
   GET_PAGE_NUMBER,
   GET_PAGE_COUNT,
+  ADD_PUBLISH,
+  REMOVE_PUBLISH,
   TOKEN,
   UPDATE_REQUEST_COUNT,
 } from '@/constants/story';
-import { IStory, IStoryState, IRootState } from '../interfaces';
+import { IStoryState, IRootState } from '../interfaces';
 
 const { VUE_APP_API_URL } = process.env;
 
@@ -22,6 +24,8 @@ const stories: Module<IStoryState, IRootState> = {
     pageList: null,
     pageNumber: 1,
     pageCount: 0,
+    newPublishings: [],
+    newUnpublishings: [],
   },
 
   actions: {
@@ -114,6 +118,8 @@ const stories: Module<IStoryState, IRootState> = {
         await axios.post(`${VUE_APP_API_URL}/editing/publish`, { storyURL }, {
           headers: { Authorization: localStorage.getItem(TOKEN) },
         });
+
+        commit(ADD_PUBLISH, storyURL);
       } catch (err) {
         dispatch('addError', 'Problems with grabbing the page!', { root: true });
       } finally {
@@ -128,6 +134,8 @@ const stories: Module<IStoryState, IRootState> = {
         await axios.post(`${VUE_APP_API_URL}/editing/unpublish`, { storyURL }, {
           headers: { Authorization: localStorage.getItem(TOKEN) },
         });
+
+        commit(REMOVE_PUBLISH, storyURL);
       } catch (err) {
         dispatch('addError', 'Problems with grabbing the page!', { root: true });
       } finally {
@@ -152,14 +160,26 @@ const stories: Module<IStoryState, IRootState> = {
     [GET_ALL_PAGES](state, pageList) {
       state.pageList = pageList;
     },
+    [ADD_PUBLISH](state, storyURL) {
+      state.newPublishings.push(storyURL);
+
+      state.newUnpublishings.splice(state.newUnpublishings.indexOf(storyURL), 1);
+    },
+    [REMOVE_PUBLISH](state, storyURL) {
+      state.newUnpublishings.push(storyURL);
+
+      state.newPublishings.splice(state.newPublishings.indexOf(storyURL), 1);
+    },
   },
 
   getters: {
-    currentStory: ({ currentStory }): IStory | null => currentStory,
-    storyList: ({ storyList }): IStory[] | null => storyList,
-    pageList: ({ pageList }): object[] | null => pageList,
-    pageNumber: ({ pageNumber }): number => pageNumber,
-    pageCount: ({ pageCount }): number => pageCount,
+    currentStory: ({ currentStory }) => currentStory,
+    storyList: ({ storyList }) => storyList,
+    pageList: ({ pageList }) => pageList,
+    pageNumber: ({ pageNumber }) => pageNumber,
+    pageCount: ({ pageCount }) => pageCount,
+    newPublishings: ({ newPublishings }) => newPublishings,
+    newUnpublishings: ({ newUnpublishings }) => newUnpublishings,
   },
 };
 

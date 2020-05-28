@@ -38,6 +38,8 @@ export interface IStoryState {
   pageList: IPageState[] | null;
   pageNumber: number;
   pageCount: number;
+  newPublishings: string[];
+  newUnpublishings: string[];
 }
 
 export interface AuthInfo {

@@ -23,6 +23,8 @@ describe('store.stories.mutations', () => {
       pageList: null,
       pageNumber: 1,
       pageCount: 0,
+      newPublishings: [],
+      newUnpublishings: [],
     };
   });
 

@@ -31,6 +31,8 @@ describe('store.chats.getters', () => {
       currentStory: null,
       storyList: [],
       pageList: [],
+      newPublishings: [],
+      newUnpublishings: [],
       pageNumber: 0,
       pageCount: 0,
     },

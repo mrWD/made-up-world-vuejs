@@ -28,6 +28,8 @@ describe('store.stories.getters', () => {
       currentStory: null,
       storyList: [],
       pageList: [],
+      newPublishings: [],
+      newUnpublishings: [],
       pageNumber: 0,
       pageCount: 0,
     },
@@ -57,6 +59,8 @@ describe('store.stories.getters', () => {
     pageList: null,
     newFollowings: [],
     newUnfollowings: [],
+    newPublishings: [],
+    newUnpublishings: [],
     pageNumber: 0,
     pageCount: 0,
   };
