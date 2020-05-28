@@ -24,17 +24,21 @@
       Btn(v-if="!card.options" isSmall @click="$emit('showPins')") Bind next page
 
       template(v-else)
-        Btn.card__btn(
+        Btn.card__btn.tooltip-trigger(
           v-for="(page, i) in card.options"
+          v-if="page"
+          isSmall
           :key="page"
           @click="$emit('changePin', card.id, i)"
         )
-          | {{ page ? page : 'Binded page' }}
+          | {{ i + 1 }}
 
           .card__color(
             v-if="card.nextPages && card.nextPages[i]"
             :style="card.nextPages[i] | addBackground"
           )
+
+          Tooltip(:text="page")
 
 </template>
 
@@ -80,22 +84,26 @@ export default Vue.extend({
 
 <style lang="sass">
 .card
-  border-radius: 4px
-  overflow: hidden
-  background-color: $main-color
   box-shadow: 0 0 10px $main-color-darkest
+  background-color: $main-color
+  border-radius: 4px
 
   &__head
     display: flex
     align-items: center
     justify-content: flex-end
     padding: 10px 15px 15px
+    border-radius: 4px 4px 0 0
 
   &__body
     padding: 10px 15px 15px
 
-  &__btn:not(:last-child)
-    margin-right: 10px
+  &__btn
+    position: relative
+    flex-direction: column
+
+    &:not(:last-child)
+      margin-right: 10px
 
   &__pin:not(:last-child)
     margin-right: auto
@@ -111,7 +119,7 @@ export default Vue.extend({
       margin-bottom: 15px
 
   &__color
-    width: 100%
+    width: 20px
     height: 20px
 
 </style>
