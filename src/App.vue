@@ -2,9 +2,7 @@
   #app
     HeaderBlock
 
-    ul.errors
-      li.errors__item(v-for="(item, i) in errors" :key="i")
-        Btn.errors__btn(isText @click="removeError(item)") {{ item }}
+    Errors
 
     .inner(:class="{ 'inner_fluid': isFluid }")
       .inner__content(:class="{ 'inner__content_loading': isLoading }")
@@ -22,6 +20,7 @@ import { mapActions, mapGetters } from 'vuex';
 
 import HeaderBlock from '@/components/header-block/index.vue';
 import Loader from '@/components/loader/index.vue';
+import Errors from '@/components/errors/index.vue';
 import Chat from '@/components/chat/index.vue';
 
 export default Vue.extend({
@@ -32,7 +31,6 @@ export default Vue.extend({
       token: 'auth/token',
       authInfo: 'auth/authInfo',
       isLoading: 'isLoading',
-      errors: 'errors',
     }),
 
     isFluid(): boolean {
@@ -40,10 +38,7 @@ export default Vue.extend({
     },
   },
 
-  methods: mapActions({
-    getAuthInfo: 'auth/getAuthInfo',
-    removeError: 'removeError',
-  }),
+  methods: mapActions('auth', ['getAuthInfo']),
 
   created() {
     this.getAuthInfo();
@@ -52,6 +47,7 @@ export default Vue.extend({
   components: {
     HeaderBlock,
     Loader,
+    Errors,
     Chat,
   },
 });
@@ -80,6 +76,7 @@ body
 
 #app
   padding-top: 100px
+  padding-bottom: 100px
   font-family: $main-font-stack
   -webkit-font-smoothing: antialiased
   -moz-osx-font-smoothing: grayscale
@@ -105,38 +102,6 @@ ul
   margin-top: 0
   margin-bottom: 0
   padding-left: 0
-
-.errors
-  position: fixed
-  top: 70px
-  left: 0
-  right: 0
-  z-index: 100
-  display: flex
-  flex-direction: column
-  align-items: center
-  margin-left: auto
-  margin-right: auto
-
-  &__item
-    display: block
-    padding: 15px 20px
-    background-image: url('./assets/images/chat-bg.png')
-    background-position: center
-    background-repeat: no-repeat
-    background-size: 100% 100%
-    font-size: $font-size + 2
-    font-weight: 600
-    color: $black
-
-    &:not(:last-child)
-      margin-bottom: 15px
-
-  &__btn.btn_text
-    padding-bottom: 0
-
-    &:after
-      content: none
 
 .inner
   position: relative
@@ -171,7 +136,7 @@ ul
 
   &__content
     flex-grow: 1
-    padding: 50px
+    padding: 80px 50px
     overflow: hidden
     background-image: url('./assets/images/inner-bg.png')
     background-position: center
