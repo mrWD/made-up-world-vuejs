@@ -18,6 +18,9 @@ describe('Btn.vue', () => {
       isSmall: {
         type: Boolean,
       },
+      isError: {
+        type: Boolean,
+      },
       isText: {
         type: Boolean,
       },

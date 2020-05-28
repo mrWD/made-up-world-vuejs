@@ -5,7 +5,6 @@ import chats from '@/store/chats';
 import {
   TOKEN,
   UPDATE_REQUEST_COUNT,
-  ADD_ERROR,
   GET_MSG,
 } from '@/constants/story';
 
@@ -26,18 +25,19 @@ describe('store.chats.actions', () => {
   const { actions } = chats;
   const token = 'test-token';
   let commit = jest.fn();
+  let dispatch = jest.fn();
 
-  const updateRequestCommitTest = async (actionName: string, commit: jest.Mock<any, any>) => {
-    await (chats.actions as any)[actionName]({ commit });
+  const updateRequestCommitTest = async (actionName: string) => {
+    await (chats.actions as any)[actionName]({ commit, dispatch });
   
     expect(commit).toHaveBeenNthCalledWith(1, UPDATE_REQUEST_COUNT, true, { root: true });
     expect(commit).toHaveBeenCalledWith(UPDATE_REQUEST_COUNT, false, { root: true });
   };
   
-  const emptyTokenTest = async (actionName: string, commit: jest.Mock<any, any>) => {
+  const emptyTokenTest = async (actionName: string) => {
     localStorage.removeItem(TOKEN);
   
-    await (chats.actions as any)[actionName]({ commit });
+    await (chats.actions as any)[actionName]({ commit, dispatch });
   
     expect(commit).not.toHaveBeenCalled();
   };
@@ -49,20 +49,20 @@ describe('store.chats.actions', () => {
     });
 
     it('does not do anything if localStorage[TOKEN] is empty', async () => {
-      await emptyTokenTest('getChatByRecipient', commit);
+      await emptyTokenTest('getChatByRecipient');
     });
 
     it('always calls commit with UPDATE_REQUEST_COUNT 2 times', async () => {
-      await updateRequestCommitTest('getChatByRecipient', commit);
+      await updateRequestCommitTest('getChatByRecipient');
     });
 
-    it('calls the second commit with ADD_ERROR if recieved data is error', async () => {
+    it('calls dispatch with addError if recieved data is error', async () => {
       (axios.post as any).mockRejectedValueOnce(new Error('Some error!'));
     
-      await (chats.actions as any).getChatByRecipient({ commit });
+      await (chats.actions as any).getChatByRecipient({ commit, dispatch });
     
-      expect(commit)
-        .toHaveBeenCalledWith(ADD_ERROR, 'Problems with grabbing the page!', { root: true });
+      expect(dispatch)
+        .toHaveBeenCalledWith('addError', 'Problems with grabbing the page!', { root: true });
     });
   });
 
@@ -73,20 +73,20 @@ describe('store.chats.actions', () => {
     });
 
     it('does not do anything if localStorage[TOKEN] is empty', async () => {
-      await emptyTokenTest('getChatList', commit);
+      await emptyTokenTest('getChatList');
     });
 
     it('always calls commit with UPDATE_REQUEST_COUNT 2 times', async () => {
-      await updateRequestCommitTest('getChatList', commit);
+      await updateRequestCommitTest('getChatList');
     });
 
-    it('calls the second commit with ADD_ERROR if recieved data is error', async () => {
+    it('calls dispatch with addError if recieved data is error', async () => {
       (axios.get as any).mockRejectedValueOnce(new Error('Some error!'));
     
-      await (chats.actions as any).getChatList({ commit });
+      await (chats.actions as any).getChatList({ commit, dispatch });
     
-      expect(commit)
-        .toHaveBeenCalledWith(ADD_ERROR, 'Problems with grabbing the page!', { root: true });
+      expect(dispatch)
+        .toHaveBeenCalledWith('addError', 'Problems with grabbing the page!', { root: true });
     });
   });
 
@@ -97,20 +97,20 @@ describe('store.chats.actions', () => {
     });
 
     it('does not do anything if localStorage[TOKEN] is empty', async () => {
-      await emptyTokenTest('getMsgList', commit);
+      await emptyTokenTest('getMsgList');
     });
 
     it('always calls commit with UPDATE_REQUEST_COUNT 2 times', async () => {
-      await updateRequestCommitTest('getMsgList', commit);
+      await updateRequestCommitTest('getMsgList');
     });
 
-    it('calls the second commit with ADD_ERROR if recieved data is error', async () => {
+    it('calls dispatch with addError if recieved data is error', async () => {
       (axios.post as any).mockRejectedValueOnce(new Error('Some error!'));
     
-      await (chats.actions as any).getMsgList({ commit });
+      await (chats.actions as any).getMsgList({ commit, dispatch });
     
-      expect(commit)
-        .toHaveBeenCalledWith(ADD_ERROR, 'Problems with grabbing the page!', { root: true });
+      expect(dispatch)
+        .toHaveBeenCalledWith('addError', 'Problems with grabbing the page!', { root: true });
     });
   });
 

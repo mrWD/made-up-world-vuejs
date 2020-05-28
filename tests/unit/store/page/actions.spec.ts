@@ -2,13 +2,7 @@ import axios from 'axios';
 
 import page from '@/store/page';
 
-import {
-  GET_PAGES,
-  SAVE_PAGE,
-  TOKEN,
-  UPDATE_REQUEST_COUNT,
-  ADD_ERROR,
-} from '@/constants/story';
+import { UPDATE_REQUEST_COUNT } from '@/constants/story';
 
 jest.mock('axios', () => ({
   get: jest.fn().mockResolvedValue({
@@ -26,10 +20,11 @@ jest.mock('axios', () => ({
 describe('store.page.actions', () => {
   const { actions } = page;
   let commit = jest.fn();
+  let dispatch = jest.fn();
 
   const updateRequestCommitTest =
-    async (actionName: string, commit: jest.Mock<any, any>, args?: any) => {
-      await (page.actions as any)[actionName]({ commit }, args);
+    async (actionName: string, args?: any) => {
+      await (page.actions as any)[actionName]({ commit, dispatch }, args);
     
       expect(commit).toHaveBeenNthCalledWith(1, UPDATE_REQUEST_COUNT, true, { root: true });
       expect(commit).toHaveBeenCalledWith(UPDATE_REQUEST_COUNT, false, { root: true });
@@ -38,57 +33,60 @@ describe('store.page.actions', () => {
   describe('getPage', () => {
     beforeEach(() => {
       commit.mockClear();
+      dispatch.mockClear();
     });
 
     it('always calls commit with UPDATE_REQUEST_COUNT 2 times', async () => {
-      await updateRequestCommitTest('getPage', commit);
+      await updateRequestCommitTest('getPage');
     });
 
-    it('calls the second commit with ADD_ERROR if recieved data is error', async () => {
-      (axios.get as any).mockRejectedValueOnce(new Error('Some error!'));
+    it('calls dispatch with addError if recieved data is error', async () => {
+      (axios.post as any).mockRejectedValueOnce(new Error('Some error!'));
   
-      await (actions as any).getPage({ commit }, {});
+      await (actions as any).getPage({ commit, dispatch }, {});
   
-      expect(commit)
-        .toHaveBeenCalledWith(ADD_ERROR, 'Problems with grabbing the page!', { root: true });
+      expect(dispatch)
+        .toHaveBeenCalledWith('addError', 'Problems with grabbing the page!', { root: true });
     });
   });
 
   describe('removePage', () => {
     beforeEach(() => {
       commit.mockClear();
+      dispatch.mockClear();
     });
 
     it('always calls commit with UPDATE_REQUEST_COUNT 2 times', async () => {
-      await updateRequestCommitTest('removePage', commit);
+      await updateRequestCommitTest('removePage');
     });
 
-    it('calls the second commit with ADD_ERROR if recieved data is error', async () => {
+    it('calls dispatch with addError if recieved data is error', async () => {
       (axios.get as any).mockRejectedValueOnce(new Error('Some error!'));
   
-      await (actions as any).removePage({ commit }, {});
+      await (actions as any).removePage({ commit, dispatch }, {});
   
-      expect(commit)
-        .toHaveBeenCalledWith(ADD_ERROR, 'Problems with grabbing the page!', { root: true });
+      expect(dispatch)
+        .toHaveBeenCalledWith('addError', 'Problems with grabbing the page!', { root: true });
     });
   });
 
   describe('savePage', () => {
     beforeEach(() => {
       commit.mockClear();
+      dispatch.mockClear();
     });
 
     it('always calls commit with UPDATE_REQUEST_COUNT 2 times', async () => {
-      await updateRequestCommitTest('savePage', commit, {});
+      await updateRequestCommitTest('savePage', {});
     });
 
-    it('calls the second commit with ADD_ERROR if recieved data is error', async () => {
+    it('calls dispatch with addError if recieved data is error', async () => {
       (axios.post as any).mockRejectedValueOnce(new Error('Some error!'));
   
-      await (actions as any).savePage({ commit }, {});
+      await (actions as any).savePage({ commit, dispatch }, {});
   
-      expect(commit)
-        .toHaveBeenCalledWith(ADD_ERROR, 'Problems with grabbing the page!', { root: true });
+      expect(dispatch)
+        .toHaveBeenCalledWith('addError', 'Problems with grabbing the page!', { root: true });
     });
   });
 });

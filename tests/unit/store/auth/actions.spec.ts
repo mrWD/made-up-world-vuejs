@@ -5,7 +5,6 @@ import {
   GET_AUTH_INFO,
   TOKEN,
   UPDATE_REQUEST_COUNT,
-  ADD_ERROR,
 } from '@/constants/story';
 
 jest.mock('axios', () => ({
@@ -27,17 +26,17 @@ describe('store.auth.actions', () => {
   let commit = jest.fn();
   let dispatch = jest.fn();
 
-  const updateRequestCommitTest = async (actionName: string, commit: jest.Mock<any, any>) => {
-    await (auth.actions as any).getAuthInfo({ commit });
+  const updateRequestCommitTest = async (actionName: string) => {
+    await (auth.actions as any).getAuthInfo({ commit, dispatch });
 
     expect(commit).toHaveBeenNthCalledWith(1, UPDATE_REQUEST_COUNT, true, { root: true });
     expect(commit).toHaveBeenCalledWith(UPDATE_REQUEST_COUNT, false, { root: true });
   };
 
-  const emptyTokenTest = async (actionName: string, commit: jest.Mock<any, any>) => {
+  const emptyTokenTest = async (actionName: string) => {
     localStorage.removeItem(TOKEN);
 
-    await (auth.actions as any)[actionName]({ commit });
+    await (auth.actions as any)[actionName]({ commit, dispatch });
 
     expect(commit).not.toHaveBeenCalled();
   };
@@ -49,20 +48,20 @@ describe('store.auth.actions', () => {
     });
 
     it('does not do anything if localStorage[TOKEN] is empty', async () => {
-      await emptyTokenTest('getAuthInfo', commit);
+      await emptyTokenTest('getAuthInfo');
     });
 
     it('always calls commit with UPDATE_REQUEST_COUNT 2 times', async () => {
-      await updateRequestCommitTest('getAuthInfo', commit);
+      await updateRequestCommitTest('getAuthInfo');
     });
 
-    it('calls the second commit with ADD_ERROR if recieved data is error', async () => {
+    it('calls dispatch with addError if recieved data is error', async () => {
       (axios.get as any).mockRejectedValueOnce(new Error('Some error!'));
   
-      await (auth.actions as any).getAuthInfo({ commit });
+      await (auth.actions as any).getAuthInfo({ commit, dispatch });
   
-      expect(commit)
-        .toHaveBeenCalledWith(ADD_ERROR, 'Problems with grabbing the page!', { root: true });
+      expect(dispatch)
+        .toHaveBeenCalledWith('addError', 'Problems with grabbing the page!', { root: true });
     });
   });
 
@@ -73,22 +72,22 @@ describe('store.auth.actions', () => {
     });
 
     it('always calls commit with UPDATE_REQUEST_COUNT 2 times', async () => {
-      await updateRequestCommitTest('signUp', commit);
+      await updateRequestCommitTest('signUp');
     });
 
     it('axios.post has been called twice', async () => {
-      await (actions as any).signUp({ commit }, { file: File });
+      await (actions as any).signUp({ commit, dispatch }, { file: File });
 
       expect(axios.post).toHaveBeenCalledTimes(2);
     });
 
-    it('calls the second commit with ADD_ERROR if recieved data is error', async () => {
+    it('calls dispatch with addError if recieved data is error', async () => {
       (axios.post as any).mockRejectedValueOnce(new Error('Some error!'));
   
-      await (auth.actions as any).signUp({ commit });
+      await (auth.actions as any).signUp({ commit, dispatch });
   
-      expect(commit)
-        .toHaveBeenCalledWith(ADD_ERROR, 'Problems with grabbing the page!', { root: true });
+      expect(dispatch)
+        .toHaveBeenCalledWith('addError', 'Problems with grabbing the page!', { root: true });
     });
   });
   
@@ -99,7 +98,7 @@ describe('store.auth.actions', () => {
     });
 
     it('always calls commit with UPDATE_REQUEST_COUNT 2 times', async () => {
-      await updateRequestCommitTest('signIn', commit);
+      await updateRequestCommitTest('signIn');
     });
 
     it('calls dispatch with "getAuthInfo" as the first attribute', async () => {
@@ -114,13 +113,13 @@ describe('store.auth.actions', () => {
       expect(dispatch).toHaveBeenCalledWith('getAuthInfo');
     });
 
-    it('calls the second commit with ADD_ERROR if recieved data is error', async () => {
+    it('calls dispatch with addError if recieved data is error', async () => {
       (axios.post as any).mockRejectedValueOnce(new Error('Some error!'));
   
-      await (auth.actions as any).signIn({ commit });
+      await (auth.actions as any).signIn({ commit, dispatch });
   
-      expect(commit)
-        .toHaveBeenCalledWith(ADD_ERROR, 'Problems with grabbing the page!', { root: true });
+      expect(dispatch)
+        .toHaveBeenCalledWith('addError', 'Problems with grabbing the page!', { root: true });
     });
   });
 
@@ -134,7 +133,7 @@ describe('store.auth.actions', () => {
     it('clear localStorage[TOKEN] and calls commit with GET_AUTH_INFO and NULL', () => {
       expect(localStorage.getItem(TOKEN)).toBe(token);
 
-      (actions as any).signOut({ commit });
+      (actions as any).signOut({ commit, dispatch });
 
       expect(localStorage.getItem(TOKEN)).toBeNull();
       expect(commit).toHaveBeenCalledWith(GET_AUTH_INFO, null);

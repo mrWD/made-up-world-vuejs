@@ -3,8 +3,6 @@ import axios from 'axios';
 import users from '@/store/users';
 
 import {
-  GET_PAGES,
-  SAVE_PAGE,
   TOKEN,
   UPDATE_REQUEST_COUNT,
   ADD_ERROR,
@@ -22,27 +20,28 @@ describe('store.users.actions', () => {
   const { actions } = users;
   const token = 'test-token';
   let commit = jest.fn();
+  let dispatch = jest.fn();
 
-  const errorCommitTest = async (actionName: string, commit: jest.Mock<any, any>) => {
+  const errorCommitTest = async (actionName: string) => {
     (axios.post as any).mockRejectedValueOnce(new Error('Some error!'));
   
-    await (actions as any)[actionName]({ commit });
+    await (actions as any)[actionName]({ commit, dispatch });
   
-    expect(commit)
-      .toHaveBeenCalledWith(ADD_ERROR, 'Problems with grabbing the page!', { root: true });
+    expect(dispatch)
+      .toHaveBeenCalledWith('addError', 'Problems with grabbing the page!', { root: true });
   };
   
-  const updateRequestCommitTest = async (actionName: string, commit: jest.Mock<any, any>) => {
-    await (actions as any)[actionName]({ commit });
+  const updateRequestCommitTest = async (actionName: string) => {
+    await (actions as any)[actionName]({ commit, dispatch });
   
     expect(commit).toHaveBeenNthCalledWith(1, UPDATE_REQUEST_COUNT, true, { root: true });
     expect(commit).toHaveBeenCalledWith(UPDATE_REQUEST_COUNT, false, { root: true });
   };
   
-  const emptyTokenTest = async (actionName: string, commit: jest.Mock<any, any>) => {
+  const emptyTokenTest = async (actionName: string) => {
     localStorage.removeItem(TOKEN);
   
-    await (actions as any)[actionName]({ commit });
+    await (actions as any)[actionName]({ commit, dispatch });
   
     expect(commit).not.toHaveBeenCalled();
   };
@@ -54,11 +53,11 @@ describe('store.users.actions', () => {
     });
 
     it('always calls commit with UPDATE_REQUEST_COUNT 2 times', async () => {
-      await updateRequestCommitTest('getUserInfo', commit);
+      await updateRequestCommitTest('getUserInfo');
     });
 
-    it('calls the second commit with ADD_ERROR if recieved data is error', async () => {
-      await errorCommitTest('getUserInfo', commit);
+    it('calls dispatch with addError if recieved data is error', async () => {
+      await errorCommitTest('getUserInfo');
     });
   });
 
@@ -69,11 +68,11 @@ describe('store.users.actions', () => {
     });
 
     it('always calls commit with UPDATE_REQUEST_COUNT 2 times', async () => {
-      await updateRequestCommitTest('getUserList', commit);
+      await updateRequestCommitTest('getUserList');
     });
 
-    it('calls the second commit with ADD_ERROR if recieved data is error', async () => {
-      await errorCommitTest('getUserList', commit);
+    it('calls dispatch with addError if recieved data is error', async () => {
+      await errorCommitTest('getUserList');
     });
   });
 
@@ -84,15 +83,15 @@ describe('store.users.actions', () => {
     });
 
     it('does not do anything if localStorage[TOKEN] is empty', async () => {
-      await emptyTokenTest('follow', commit);
+      await emptyTokenTest('follow');
     });
 
     it('always calls commit with UPDATE_REQUEST_COUNT 2 times', async () => {
-      await updateRequestCommitTest('follow', commit);
+      await updateRequestCommitTest('follow');
     });
 
-    it('calls the second commit with ADD_ERROR if recieved data is error', async () => {
-      await errorCommitTest('follow', commit);
+    it('calls dispatch with addError if recieved data is error', async () => {
+      await errorCommitTest('follow');
     });
   });
 
@@ -103,15 +102,15 @@ describe('store.users.actions', () => {
     });
 
     it('does not do anything if localStorage[TOKEN] is empty', async () => {
-      await emptyTokenTest('unfollow', commit);
+      await emptyTokenTest('unfollow');
     });
 
     it('always calls commit with UPDATE_REQUEST_COUNT 2 times', async () => {
-      await updateRequestCommitTest('unfollow', commit);
+      await updateRequestCommitTest('unfollow');
     });
 
-    it('calls the second commit with ADD_ERROR if recieved data is error', async () => {
-      await errorCommitTest('unfollow', commit);
+    it('calls dispatch with addError if recieved data is error', async () => {
+      await errorCommitTest('unfollow');
     });
   });
 });
