@@ -12,11 +12,9 @@
         v-if="!authInfo || isNotUser(user.login)"
         :key="i"
       )
-        router-link.user-list__link(
-          :to="{ name: 'User', params: { id: user.login } }"
-        )
+        router-link.user-list__link(:to="{ name: 'User', params: { id: user.login } }")
           Photo.user-list__photo(
-            :src="`${config.VUE_APP_API_URL}/${userList.destination}/${user.photo}`"
+            :src="`${destination}/${user.photo}`"
             :alt="user.login"
             width="50"
             height="50"
@@ -57,6 +55,7 @@ export default Vue.extend({
   computed: {
     ...mapGetters({
       userList: 'users/userList',
+      destination: 'users/destination',
       pageNumber: 'users/pageNumber',
       pageCount: 'users/pageCount',
       authInfo: 'auth/authInfo',

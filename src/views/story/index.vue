@@ -1,16 +1,24 @@
 <template lang="pug">
   section.story(v-if="currentStory")
-    router-link.story__author(
-      :to="{ name: 'User', params: { id: currentStory.owner.login } }"
-    )
-      | {{ currentStory.owner.login }}
+    .story__head
+      Btn(isSmall @click="getStory({ storyURL: $route.params.id })")
+        svgicon(icon="return")
+
+      router-link.btn.btn_text(
+        :to="{ name: 'User', params: { id: currentStory.owner.login } }"
+      )
+        | {{ currentStory.owner.login }}
 
     h1.story__title {{ currentStory.title }}
 
     p.story__text {{ currentStory.body }}
 
     ul.story__list(v-if="currentStory.options[0]")
-      li.story__el(v-for="(item, i) in currentStory.options" :key="i")
+      li.story__el(
+        v-for="(item, i) in currentStory.options"
+        v-if="item && currentStory.nextPages[i]"
+        :key="i"
+      )
         button.story__btn.btn(type="button" @click="nextPage(currentStory.nextPages[i])") {{ item }}
 
 </template>
@@ -43,7 +51,17 @@ export default Vue.extend({
 
 <style lang="sass">
 .story
+  position: relative
   text-align: center
+
+  &__head
+    position: absolute
+    bottom: 100%
+    left: 0
+    right: 0
+    display: flex
+    justify-content: space-between
+    align-items: flex-start
 
   &__author
     float: right

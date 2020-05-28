@@ -127,8 +127,8 @@ export default Vue.extend({
       getAllPages: 'stories/getAllPages',
       saveStory: 'stories/saveStory',
       removeStory: 'stories/removeStory',
-      publish: 'stories/publish',
-      unpublish: 'stories/unpublish',
+      publishStory: 'stories/publishStory',
+      unpublishStory: 'stories/unpublishStory',
       removePage: 'page/removePage',
     }),
 

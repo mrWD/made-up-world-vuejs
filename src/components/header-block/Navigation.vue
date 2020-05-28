@@ -66,4 +66,11 @@
       content: ''
       transition: transform 0.3s, opacity 0.3s
 
+    &:hover
+      background-color: transparent
+
+      &:after
+        transform: translate(-50%)
+        opacity: 1
+
 </style>

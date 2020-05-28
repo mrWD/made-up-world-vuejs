@@ -1,6 +1,9 @@
 <template lang="pug">
   form.edit-page
+    h1(v-if="currentStory.title") {{ currentStory.title }}
+
     input.edit-page__field.field(
+      v-else
       v-model="form.title"
       type="text"
       placeholder="Name of your story"

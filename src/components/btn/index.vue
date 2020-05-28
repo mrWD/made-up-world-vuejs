@@ -1,7 +1,10 @@
 <template lang="pug" functional>
   button.btn(
     :class="[\
-      { 'btn_small': props.isSmall, 'btn_text': props.isText }, ...data.staticClass,\
+      { 'btn_small': props.isSmall },\
+      { 'btn_text': props.isText },\
+      { 'btn_error': props.isError },\
+      ...data.staticClass,\
     ]"
     type="button"
     :disabled="props.disabled"
@@ -19,6 +22,9 @@ export default Vue.extend({
 
   props: {
     isSmall: {
+      type: Boolean,
+    },
+    isError: {
       type: Boolean,
     },
     isText: {
@@ -62,7 +68,7 @@ export default Vue.extend({
     width: 24px
     height: 24px
     vertical-align: middle
-    color: $black
+    color: inherit
 
   &_small
     padding: 2px 6px
@@ -72,9 +78,21 @@ export default Vue.extend({
       width: 14px
       height: 14px
 
+  &_error
+    border-color: $error
+    background-image: radial-gradient(transparent 50%, $error)
+    background-color: $error-light
+    color: $error-dark
+
+    &.btn_text
+      padding-bottom: 0
+
+      &:after
+        content: none
+
   &_text
     position: relative
-    display: inline-block
+    display: inline-flex
     padding-top: 0
     padding-bottom: 8px
     padding-left: 5px
@@ -85,7 +103,6 @@ export default Vue.extend({
     font-size: $font-size + 6
     font-weight: 600
     text-decoration: none
-    color: $black
 
     &:not(:last-of-type)
       +for-tablet-up
