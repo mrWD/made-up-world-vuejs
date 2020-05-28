@@ -7,6 +7,7 @@ import App from '@/App.vue';
 
 import Btn from '@/components/btn/index.vue';
 import Field from '@/components/field/index.vue';
+import Tooltip from '@/components/tooltip/index.vue';
 
 import '@/helpers/icons';
 import '@/registerServiceWorker';
@@ -25,6 +26,7 @@ Vue.mixin({
 
 Vue.component('Field', Field);
 Vue.component('Btn', Btn);
+Vue.component('Tooltip', Tooltip);
 
 new Vue({
   router,

@@ -10,6 +10,8 @@
       .inner__content(:class="{ 'inner__content_loading': isLoading }")
         router-view
 
+      Loader(v-if="isLoading")
+
     Chat(v-if="authInfo" :authInfo="authInfo" :token="token")
 
 </template>
@@ -17,6 +19,10 @@
 <script lang="ts">
 import Vue from 'vue';
 import { mapActions, mapGetters } from 'vuex';
+
+import HeaderBlock from '@/components/header-block/index.vue';
+import Loader from '@/components/loader/index.vue';
+import Chat from '@/components/chat/index.vue';
 
 export default Vue.extend({
   name: 'App',
@@ -44,8 +50,9 @@ export default Vue.extend({
   },
 
   components: {
-    Chat: () => import('@/components/chat/index.vue'),
-    HeaderBlock: () => import('@/components/header-block/index.vue'),
+    HeaderBlock,
+    Loader,
+    Chat,
   },
 });
 
