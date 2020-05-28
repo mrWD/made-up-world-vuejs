@@ -11,4 +11,5 @@ import './logo';
 import './msg';
 import './page';
 import './pin';
+import './return';
 import './show';
