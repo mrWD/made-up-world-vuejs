@@ -63,7 +63,11 @@
           )
             svgicon(icon="msg")
 
-          Btn.user__btn(v-if="isUser" isSmall @click="unfollow(slotData.login)")
+          Btn.user__btn(
+            v-if="isUser && newUnfollowings.indexOf(slotData.login) === -1"
+            isSmall
+            @click="unfollow(slotData.login)"
+          )
             svgicon(icon="cross")
 
       List(
@@ -171,10 +175,9 @@ export default Vue.extend({
 
     isFollowedFilter(userList: User[], user: User): boolean {
       const isNewFollowing = this.newFollowings.indexOf(user.login) !== -1;
-      const isNewUnfollowing = this.newUnfollowings.indexOf(user.login) !== -1;
+      const isOldFollowing = !userList.some(({ login }) => login === user.login);
 
-      return isNewUnfollowing
-        || (!isNewFollowing && !userList.some(({ login }) => login === user.login));
+      return !isNewFollowing && isOldFollowing;
     },
   },
 
