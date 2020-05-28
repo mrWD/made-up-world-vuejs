@@ -5,7 +5,6 @@ import {
   GET_TOKEN,
   TOKEN,
   UPDATE_REQUEST_COUNT,
-  ADD_ERROR,
 } from '@/constants/story';
 import { IAuthState, IRootState } from '../interfaces';
 
@@ -20,7 +19,7 @@ const auth: Module<IAuthState, IRootState> = {
   },
 
   actions: {
-    async getAuthInfo({ commit }): Promise<void> {
+    async getAuthInfo({ commit, dispatch }): Promise<void> {
       const token = localStorage.getItem(TOKEN);
 
       if (!token) return;
@@ -35,13 +34,13 @@ const auth: Module<IAuthState, IRootState> = {
         commit(GET_TOKEN, token);
         commit(GET_AUTH_INFO, data);
       } catch (err) {
-        commit(ADD_ERROR, 'Problems with grabbing the page!', { root: true });
+        dispatch('addError', 'Problems with grabbing the page!', { root: true });
       } finally {
         commit(UPDATE_REQUEST_COUNT, false, { root: true });
       }
     },
 
-    async signUp({ commit }, body): Promise<void> {
+    async signUp({ commit, dispatch }, body): Promise<void> {
       try {
         commit(UPDATE_REQUEST_COUNT, true, { root: true });
 
@@ -57,7 +56,7 @@ const auth: Module<IAuthState, IRootState> = {
           },
         });
       } catch (err) {
-        commit(ADD_ERROR, 'Problems with grabbing the page!', { root: true });
+        dispatch('addError', 'Problems with grabbing the page!', { root: true });
       } finally {
         commit(UPDATE_REQUEST_COUNT, false, { root: true });
       }
@@ -73,7 +72,7 @@ const auth: Module<IAuthState, IRootState> = {
 
         dispatch('getAuthInfo');
       } catch (err) {
-        commit(ADD_ERROR, 'Problems with grabbing the page!', { root: true });
+        dispatch('addError', 'Problems with grabbing the page!', { root: true });
       } finally {
         commit(UPDATE_REQUEST_COUNT, false, { root: true });
       }

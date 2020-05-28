@@ -8,7 +8,6 @@ import {
   GET_PAGE_COUNT,
   TOKEN,
   UPDATE_REQUEST_COUNT,
-  ADD_ERROR,
 } from '@/constants/story';
 import { IStory, IStoryState, IRootState } from '../interfaces';
 
@@ -26,7 +25,7 @@ const stories: Module<IStoryState, IRootState> = {
   },
 
   actions: {
-    async getStoryList({ commit }, body): Promise<void> {
+    async getStoryList({ commit, dispatch }, body): Promise<void> {
       const token = localStorage.getItem(TOKEN);
 
       try {
@@ -40,13 +39,13 @@ const stories: Module<IStoryState, IRootState> = {
         commit(GET_PAGE_NUMBER, data.page);
         commit(GET_PAGE_COUNT, data.pages);
       } catch (err) {
-        commit(ADD_ERROR, 'Problems with grabbing the page!', { root: true });
+        dispatch('addError', 'Problems with grabbing the page!', { root: true });
       } finally {
         commit(UPDATE_REQUEST_COUNT, false, { root: true });
       }
     },
 
-    async getStory({ commit }, { storyURL, pageId }): Promise<void> {
+    async getStory({ commit, dispatch }, { storyURL, pageId }): Promise<void> {
       try {
         commit(UPDATE_REQUEST_COUNT, true, { root: true });
 
@@ -54,13 +53,13 @@ const stories: Module<IStoryState, IRootState> = {
 
         commit(GET_STORY, data);
       } catch (err) {
-        commit(ADD_ERROR, 'Problems with grabbing the page!', { root: true });
+        dispatch('addError', 'Problems with grabbing the page!', { root: true });
       } finally {
         commit(UPDATE_REQUEST_COUNT, false, { root: true });
       }
     },
 
-    async getAllPages({ commit }, storyURL): Promise<void> {
+    async getAllPages({ commit, dispatch }, storyURL): Promise<void> {
       try {
         commit(UPDATE_REQUEST_COUNT, true, { root: true });
 
@@ -70,13 +69,13 @@ const stories: Module<IStoryState, IRootState> = {
 
         commit(GET_ALL_PAGES, data);
       } catch (err) {
-        commit(ADD_ERROR, 'Problems with grabbing the page!', { root: true });
+        dispatch('addError', 'Problems with grabbing the page!', { root: true });
       } finally {
         commit(UPDATE_REQUEST_COUNT, false, { root: true });
       }
     },
 
-    async saveStory({ commit }, body): Promise<void> {
+    async saveStory({ commit, dispatch }, body): Promise<void> {
       try {
         commit(UPDATE_REQUEST_COUNT, true, { root: true });
 
@@ -86,13 +85,13 @@ const stories: Module<IStoryState, IRootState> = {
 
         commit(GET_ALL_PAGES, data);
       } catch (err) {
-        commit(ADD_ERROR, 'Problems with grabbing the page!', { root: true });
+        dispatch('addError', 'Problems with grabbing the page!', { root: true });
       } finally {
         commit(UPDATE_REQUEST_COUNT, false, { root: true });
       }
     },
 
-    async removeStory({ commit }, storyURL): Promise<void> {
+    async removeStory({ commit, dispatch }, storyURL): Promise<void> {
       try {
         commit(UPDATE_REQUEST_COUNT, true, { root: true });
 
@@ -102,13 +101,13 @@ const stories: Module<IStoryState, IRootState> = {
 
         commit(GET_ALL_PAGES, data);
       } catch (err) {
-        commit(ADD_ERROR, 'Problems with grabbing the page!', { root: true });
+        dispatch('addError', 'Problems with grabbing the page!', { root: true });
       } finally {
         commit(UPDATE_REQUEST_COUNT, false, { root: true });
       }
     },
 
-    async publishStory({ commit }, storyURL): Promise<void> {
+    async publishStory({ commit, dispatch }, storyURL): Promise<void> {
       try {
         commit(UPDATE_REQUEST_COUNT, true, { root: true });
 
@@ -116,13 +115,13 @@ const stories: Module<IStoryState, IRootState> = {
           headers: { Authorization: localStorage.getItem(TOKEN) },
         });
       } catch (err) {
-        commit(ADD_ERROR, 'Problems with grabbing the page!', { root: true });
+        dispatch('addError', 'Problems with grabbing the page!', { root: true });
       } finally {
         commit(UPDATE_REQUEST_COUNT, false, { root: true });
       }
     },
 
-    async unpublishStory({ commit }, storyURL): Promise<void> {
+    async unpublishStory({ commit, dispatch }, storyURL): Promise<void> {
       try {
         commit(UPDATE_REQUEST_COUNT, true, { root: true });
 
@@ -130,7 +129,7 @@ const stories: Module<IStoryState, IRootState> = {
           headers: { Authorization: localStorage.getItem(TOKEN) },
         });
       } catch (err) {
-        commit(ADD_ERROR, 'Problems with grabbing the page!', { root: true });
+        dispatch('addError', 'Problems with grabbing the page!', { root: true });
       } finally {
         commit(UPDATE_REQUEST_COUNT, false, { root: true });
       }

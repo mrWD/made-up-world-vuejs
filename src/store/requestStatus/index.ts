@@ -4,6 +4,8 @@ import { UPDATE_REQUEST_COUNT, ADD_ERROR, REMOVE_ERROR } from '@/constants/story
 
 import { IReqStatusState, IRootState } from '../interfaces';
 
+const ERR_TIMEOUT = 5000;
+
 const requestStatus: Module<IReqStatusState, IRootState> = {
   state: {
     isLoading: false,
@@ -12,6 +14,14 @@ const requestStatus: Module<IReqStatusState, IRootState> = {
   },
 
   actions: {
+    addError({ commit, dispatch }, err) {
+      commit(ADD_ERROR, err);
+
+      setTimeout(() => {
+        dispatch('removeError', err);
+      }, ERR_TIMEOUT);
+    },
+
     removeError({ commit }, err) {
       commit(REMOVE_ERROR, err);
     },

@@ -75,6 +75,7 @@ export interface IChatState {
 export interface IUsersState {
   userInfo: object | null;
   userList: object[] | null;
+  destination: string;
   pageNumber: number;
   pageCount: number;
 }

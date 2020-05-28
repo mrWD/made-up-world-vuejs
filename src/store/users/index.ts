@@ -5,9 +5,9 @@ import {
   GET_USER_LIST,
   GET_PAGE_NUMBER,
   GET_PAGE_COUNT,
+  GET_IMAGE_DESTINATION,
   TOKEN,
   UPDATE_REQUEST_COUNT,
-  ADD_ERROR,
 } from '@/constants/story';
 import { IUsersState, IRootState } from '../interfaces';
 
@@ -19,26 +19,28 @@ const users: Module<IUsersState, IRootState> = {
   state: {
     userInfo: null,
     userList: null,
+    destination: '',
     pageNumber: 1,
     pageCount: 0,
   },
 
   actions: {
-    async getUserInfo({ commit }, login): Promise<void> {
+    async getUserInfo({ commit, dispatch }, login): Promise<void> {
       try {
         commit(UPDATE_REQUEST_COUNT, true, { root: true });
 
         const { data } = await axios.post(`${VUE_APP_API_URL}/users/user-info`, { login });
 
-        commit(GET_USER_INFO, data);
+        commit(GET_USER_INFO, data.user);
+        commit(GET_IMAGE_DESTINATION, data.destination);
       } catch (err) {
-        commit(ADD_ERROR, 'Problems with grabbing the page!', { root: true });
+        dispatch('addError', 'Problems with grabbing the page!', { root: true });
       } finally {
         commit(UPDATE_REQUEST_COUNT, false, { root: true });
       }
     },
 
-    async getUserList({ commit }, body): Promise<void> {
+    async getUserList({ commit, dispatch }, body): Promise<void> {
       try {
         commit(UPDATE_REQUEST_COUNT, true, { root: true });
 
@@ -47,14 +49,15 @@ const users: Module<IUsersState, IRootState> = {
         commit(GET_USER_LIST, data.userList);
         commit(GET_PAGE_NUMBER, data.page);
         commit(GET_PAGE_COUNT, data.pages);
+        commit(GET_IMAGE_DESTINATION, data.destination);
       } catch (err) {
-        commit(ADD_ERROR, 'Problems with grabbing the page!', { root: true });
+        dispatch('addError', 'Problems with grabbing the page!', { root: true });
       } finally {
         commit(UPDATE_REQUEST_COUNT, false, { root: true });
       }
     },
 
-    async follow({ commit }, login): Promise<void> {
+    async follow({ commit, dispatch }, login): Promise<void> {
       const token = localStorage.getItem(TOKEN);
 
       if (!token) return;
@@ -66,13 +69,13 @@ const users: Module<IUsersState, IRootState> = {
           headers: { Authorization: token },
         });
       } catch (err) {
-        commit(ADD_ERROR, 'Problems with grabbing the page!', { root: true });
+        dispatch('addError', 'Problems with grabbing the page!', { root: true });
       } finally {
         commit(UPDATE_REQUEST_COUNT, false, { root: true });
       }
     },
 
-    async unfollow({ commit }, login): Promise<void> {
+    async unfollow({ commit, dispatch }, login): Promise<void> {
       const token = localStorage.getItem(TOKEN);
 
       if (!token) return;
@@ -84,7 +87,7 @@ const users: Module<IUsersState, IRootState> = {
           headers: { Authorization: token },
         });
       } catch (err) {
-        commit(ADD_ERROR, 'Problems with grabbing the page!', { root: true });
+        dispatch('addError', 'Problems with grabbing the page!', { root: true });
       } finally {
         commit(UPDATE_REQUEST_COUNT, false, { root: true });
       }
@@ -104,11 +107,15 @@ const users: Module<IUsersState, IRootState> = {
     [GET_USER_LIST](state, userList: object[] | null) {
       state.userList = userList;
     },
+    [GET_IMAGE_DESTINATION](state, destination) {
+      state.destination = `${VUE_APP_API_URL}/${destination}`;
+    },
   },
 
   getters: {
     userInfo: ({ userInfo }): object | null => userInfo,
     userList: ({ userList }): object[] | null => userList,
+    destination: ({ destination }): string => destination,
     pageNumber: ({ pageNumber }): number => pageNumber,
     pageCount: ({ pageCount }): number => pageCount,
   },

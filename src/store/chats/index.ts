@@ -7,7 +7,6 @@ import {
   GET_MSG,
   TOKEN,
   UPDATE_REQUEST_COUNT,
-  ADD_ERROR,
 } from '@/constants/story';
 import {
   IChatState,
@@ -28,7 +27,7 @@ const chats: Module<IChatState, IRootState> = {
   },
 
   actions: {
-    async getChatByRecipient({ commit }, recipientID) {
+    async getChatByRecipient({ commit, dispatch }, recipientID) {
       const token = localStorage.getItem(TOKEN);
 
       if (!token) return;
@@ -42,13 +41,13 @@ const chats: Module<IChatState, IRootState> = {
 
         commit(GET_CHAT, data);
       } catch (err) {
-        commit(ADD_ERROR, 'Problems with grabbing the page!', { root: true });
+        dispatch('addError', 'Problems with grabbing the page!', { root: true });
       } finally {
         commit(UPDATE_REQUEST_COUNT, false, { root: true });
       }
     },
 
-    async getChatList({ commit }): Promise<void> {
+    async getChatList({ commit, dispatch }): Promise<void> {
       const token = localStorage.getItem(TOKEN);
 
       if (!token) return;
@@ -62,13 +61,13 @@ const chats: Module<IChatState, IRootState> = {
 
         commit(GET_CHAT_LIST, data);
       } catch (err) {
-        commit(ADD_ERROR, 'Problems with grabbing the page!', { root: true });
+        dispatch('addError', 'Problems with grabbing the page!', { root: true });
       } finally {
         commit(UPDATE_REQUEST_COUNT, false, { root: true });
       }
     },
 
-    async getMsgList({ commit }, chatID): Promise<void> {
+    async getMsgList({ commit, dispatch }, chatID): Promise<void> {
       const token = localStorage.getItem(TOKEN);
 
       if (!token) return;
@@ -83,7 +82,7 @@ const chats: Module<IChatState, IRootState> = {
 
         commit(GET_MSG_LIST, data);
       } catch (err) {
-        commit(ADD_ERROR, 'Problems with grabbing the page!', { root: true });
+        dispatch('addError', 'Problems with grabbing the page!', { root: true });
       } finally {
         commit(UPDATE_REQUEST_COUNT, false, { root: true });
       }

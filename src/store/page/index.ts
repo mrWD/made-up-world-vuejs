@@ -6,7 +6,6 @@ import {
   SAVE_PAGE,
   TOKEN,
   UPDATE_REQUEST_COUNT,
-  ADD_ERROR,
 } from '@/constants/story';
 
 import { IPage, IPageState, IRootState } from '../interfaces';
@@ -21,7 +20,25 @@ const page: Module<IPageState, IRootState> = {
   },
 
   actions: {
-    async getPage({ commit }, storyURL): Promise<void> {
+    async getPage({ commit, dispatch }, pageId): Promise<void> {
+      try {
+        commit(UPDATE_REQUEST_COUNT, true, { root: true });
+
+        const { data } = await axios.post<IPage[]>(
+          `${VUE_APP_API_URL}/editing/edit`,
+          { pageId },
+          { headers: { Authorization: localStorage.getItem(TOKEN) } },
+        );
+
+        commit(GET_PAGES, data);
+      } catch (err) {
+        dispatch('addError', 'Problems with grabbing the page!', { root: true });
+      } finally {
+        commit(UPDATE_REQUEST_COUNT, false, { root: true });
+      }
+    },
+
+    async removePage({ commit, dispatch }, storyURL): Promise<void> {
       try {
         commit(UPDATE_REQUEST_COUNT, true, { root: true });
 
@@ -32,30 +49,13 @@ const page: Module<IPageState, IRootState> = {
 
         commit(GET_PAGES, data);
       } catch (err) {
-        commit(ADD_ERROR, 'Problems with grabbing the page!', { root: true });
+        dispatch('addError', 'Problems with grabbing the page!', { root: true });
       } finally {
         commit(UPDATE_REQUEST_COUNT, false, { root: true });
       }
     },
 
-    async removePage({ commit }, storyURL): Promise<void> {
-      try {
-        commit(UPDATE_REQUEST_COUNT, true, { root: true });
-
-        const { data } = await axios.get<IPage[]>(`${VUE_APP_API_URL}/editing/edit`, {
-          data: { storyURL },
-          headers: { Authorization: localStorage.getItem(TOKEN) },
-        });
-
-        commit(GET_PAGES, data);
-      } catch (err) {
-        commit(ADD_ERROR, 'Problems with grabbing the page!', { root: true });
-      } finally {
-        commit(UPDATE_REQUEST_COUNT, false, { root: true });
-      }
-    },
-
-    async savePage({ commit }, body) {
+    async savePage({ commit, dispatch }, body) {
       try {
         commit(UPDATE_REQUEST_COUNT, true, { root: true });
 
@@ -70,7 +70,7 @@ const page: Module<IPageState, IRootState> = {
           storyURL: data.storyURL,
         });
       } catch (err) {
-        commit(ADD_ERROR, 'Problems with grabbing the page!', { root: true });
+        dispatch('addError', 'Problems with grabbing the page!', { root: true });
       } finally {
         commit(UPDATE_REQUEST_COUNT, false, { root: true });
       }
