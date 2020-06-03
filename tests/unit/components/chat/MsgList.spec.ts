@@ -36,7 +36,7 @@ describe('MsgList.vue', () => {
     expect(wrapper.vm.$data).toEqual(expectedData);
   });
 
-  it('method sendMessage calls $emmit.send, proxys data.message there and clear data.message',
+  it('method sendMsg calls $emmit.send, proxys data.message there and clear data.message',
     () => {
       const message = 'Test';
       const wrapper = shallowMount(MsgList, {
@@ -50,10 +50,10 @@ describe('MsgList.vue', () => {
 
       expect(wrapper.vm.$data.message).toBe(message);
 
-      (wrapper.vm as any).sendMessage();
+      (wrapper.vm as any).sendMsg();
 
-      expect(wrapper.emitted().send).toBeTruthy();
-      expect(wrapper.emitted().send[0][0]).toBe(message);
+      expect(wrapper.emitted().sendMsg).toBeTruthy();
+      expect(wrapper.emitted().sendMsg[0][0]).toBe(message);
 
       expect(wrapper.vm.$data.message).toBeNull();
     });
