@@ -16,7 +16,7 @@
     form.msg-list__form
       Field.msg-list__field(v-model="message" type="textarea" row="2")
 
-      Btn.msg-list__btn(isSmall @click="sendMessage") Send
+      Btn.msg-list__btn(isSmall @click="sendMsg") Send
 
 </template>
 
@@ -42,8 +42,8 @@ export default Vue.extend({
   },
 
   methods: {
-    sendMessage(): void {
-      this.$emit('send', this.message);
+    sendMsg(): void {
+      this.$emit('sendMsg', this.message);
 
       this.message = null;
     },
