@@ -4,8 +4,8 @@
 
     Errors
 
-    .inner(:class="{ 'inner_fluid': isFluid }")
-      .inner__content(:class="{ 'inner__content_loading': isLoading }")
+    .inner
+      .inner__content
         router-view
 
       Loader(v-if="isLoading")
@@ -26,17 +26,11 @@ import Chat from '@/components/chat/index.vue';
 export default Vue.extend({
   name: 'App',
 
-  computed: {
-    ...mapGetters({
-      token: 'auth/token',
-      authInfo: 'auth/authInfo',
-      isLoading: 'isLoading',
-    }),
-
-    isFluid(): boolean {
-      return this.$route.name === 'EditStory';
-    },
-  },
+  computed: mapGetters({
+    token: 'auth/token',
+    authInfo: 'auth/authInfo',
+    isLoading: 'isLoading',
+  }),
 
   methods: mapActions('auth', ['getAuthInfo']),
 
@@ -131,32 +125,15 @@ ul
     bottom: 0
     background-image: url('./assets/images/inner-bottom-bg.png')
 
-  &_fluid
-    max-width: 95%
-
   &__content
     flex-grow: 1
     padding-top: 60px
     padding-bottom: 80px
     padding-left: 50px
     padding-right: 50px
-    overflow: hidden
     background-image: url('./assets/images/inner-bg.png')
     background-position: top center
     background-repeat: repeat-y
     background-size: 100% auto
-    transition: max-height 5s
-
-    &_loading
-      max-height: 0vh
-      padding-bottom: 0
-      animation: loading 5s linear infinite alternate
-
-@keyframes loading
-  0%
-    max-height: 0vh
-
-  100%
-    max-height: 100vh
 
 </style>

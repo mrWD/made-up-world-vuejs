@@ -51,17 +51,12 @@ export default Vue.extend({
 
 <style lang="sass">
 .story
-  position: relative
   text-align: center
 
   &__head
-    position: absolute
-    bottom: 100%
-    left: 0
-    right: 0
     display: flex
     justify-content: space-between
-    align-items: flex-start
+    align-items: center
 
   &__author
     float: right
