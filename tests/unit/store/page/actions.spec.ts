@@ -59,15 +59,6 @@ describe('store.page.actions', () => {
     it('always calls commit with UPDATE_REQUEST_COUNT 2 times', async () => {
       await updateRequestCommitTest('removePage');
     });
-
-    it('calls dispatch with addError if recieved data is error', async () => {
-      (axios.get as any).mockRejectedValueOnce(new Error('Some error!'));
-  
-      await (actions as any).removePage({ commit, dispatch }, {});
-  
-      expect(dispatch)
-        .toHaveBeenCalledWith('addError', 'Problems with grabbing the page!', { root: true });
-    });
   });
 
   describe('savePage', () => {
