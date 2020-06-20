@@ -2,7 +2,7 @@
   .story-list
     Filters(:isOwner="isOwner")
 
-    ul.story-list(v-if="storyList")
+    ul.story-list__content(v-if="storyList")
       li.story-list__item(v-for="(item, i) in storyList" :key="i")
         .story-list__name-wrapper
           router-link.story-list__name.tooltip-trigger(
@@ -58,7 +58,7 @@ export default Vue.extend({
   },
 
   methods: {
-    ...mapActions('stories', ['getStoryList', 'getStoryList']),
+    ...mapActions('stories', ['getStoryList']),
   },
 
   filters: {
@@ -74,12 +74,6 @@ export default Vue.extend({
   },
 
   created() {
-    if (this.isOwner) {
-      this.getStoryList();
-
-      return;
-    }
-
     this.getStoryList();
   },
 

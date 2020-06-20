@@ -18,11 +18,11 @@
 
         Btn.user__btn(v-else @click="follow(userInfo.login)") Follow
 
-        Btn.user__btn(
-          v-if="!checkLogin(userInfo.login)"
-          @click="getChatByRecipient(userInfo.id)"
-        )
-          svgicon(icon="msg")
+        //- Btn.user__btn(
+        //-   v-if="!checkLogin(userInfo.login)"
+        //-   @click="getChatByRecipient(userInfo.id)"
+        //- )
+        //-   svgicon(icon="msg")
 
       hr.user__separator
 
@@ -58,12 +58,12 @@
         :list="userInfo.followings"
       )
         template(slot-scope="{ slotData }")
-          Btn.user__btn(
-            v-if="!checkLogin(slotData.login)"
-            isSmall
-            @click="getChatByRecipient(slotData.id)"
-          )
-            svgicon(icon="msg")
+          //- Btn.user__btn(
+          //-   v-if="!checkLogin(slotData.login)"
+          //-   isSmall
+          //-   @click="getChatByRecipient(slotData.id)"
+          //- )
+          //-   svgicon(icon="msg")
 
           Btn.user__btn(
             v-if="isUser && !newUnfollowings.includes(slotData.login)"
@@ -81,12 +81,12 @@
         :list="userInfo.followers"
       )
         template(slot-scope="{ slotData }")
-          Btn.user__btn(
-            v-if="!checkLogin(slotData.login)"
-            isSmall
-            @click="getChatByRecipient(slotData.id)"
-          )
-            svgicon(icon="msg")
+          //- Btn.user__btn(
+          //-   v-if="!checkLogin(slotData.login)"
+          //-   isSmall
+          //-   @click="getChatByRecipient(slotData.id)"
+          //- )
+          //-   svgicon(icon="msg")
 
           Btn.user__btn(
             v-if="isUser && isFollowedFilter(userInfo.followings, slotData)"
@@ -119,13 +119,6 @@ export default Vue.extend({
     return {
       isFollowRequested: false,
     };
-  },
-
-  props: {
-    isOwner: {
-      type: Boolean,
-      default: false,
-    },
   },
 
   computed: {

@@ -22,12 +22,12 @@
           placeholder="Add option of choice"
         )
 
-        button.btn(type="button" @click="removeOption(i - 1)")
+        Btn(@click="removeOption(i - 1)")
           svgicon.btn__icon(icon="cross")
 
-    button.btn.edit-page__btn(type="clear" @click="clearOptions") Clear all
+    Btn.edit-page__btn(@click="clearOptions") Clear all
 
-    button.btn.edit-page__btn(type="button" @click="handleSave") Save
+    Btn.edit-page__btn(@click="handleSave") Save
 
 </template>
 

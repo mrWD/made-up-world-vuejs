@@ -43,10 +43,7 @@
       type="password"
     )
 
-    button.sign-up__btn.btn(
-      type="button"
-      @click="formType === 'signup' ? signUp(form) : signIn(form)"
-    )
+    Btn.sign-up__btn( @click="formType === 'signup' ? signUp(form) : signIn(form)")
       | {{ formType === 'signup' ? 'Sign Up' : 'Sign In' }}
 
 </template>

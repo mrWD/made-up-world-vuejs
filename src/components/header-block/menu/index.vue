@@ -14,7 +14,6 @@
       SignUp.menu__sign-up(
         v-show="formType"
         :formType="formType"
-        :user="authInfo"
         @close="showAuth(formType)"
       )
 

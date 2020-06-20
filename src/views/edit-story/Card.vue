@@ -21,7 +21,7 @@
     .card__body
       p.card__title {{ card.body }}
 
-      Btn(v-if="!card.options" isSmall @click="$emit('showPins')") Bind next page
+      Btn(v-if="!card.options" isSmall @click="$emit('changePin')") Bind next page
 
       template(v-else)
         Btn.card__btn.tooltip-trigger(

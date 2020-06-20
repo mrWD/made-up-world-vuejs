@@ -19,7 +19,7 @@
         v-if="item && currentStory.nextPages[i]"
         :key="i"
       )
-        button.story__btn.btn(type="button" @click="nextPage(currentStory.nextPages[i])") {{ item }}
+        Btn.story__btn(@click="nextPage(currentStory.nextPages[i])") {{ item }}
 
 </template>
 

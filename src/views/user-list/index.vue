@@ -1,5 +1,5 @@
 <template lang="pug">
-  .user-list
+  section.user-list
     h1 All users
 
     Filters
@@ -29,8 +29,8 @@
         )
           svgicon(icon="follow")
 
-        Btn.user-list__btn(v-if="authInfo" isSmall @click="getChatByRecipient(item.id)")
-          svgicon(icon="msg")
+        //- Btn.user-list__btn(v-if="authInfo" isSmall @click="getChatByRecipient(item.id)")
+        //-   svgicon(icon="msg")
 
     Pagination(
       v-if="pageCount > 1"

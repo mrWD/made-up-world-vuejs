@@ -10,7 +10,7 @@
 
       Loader(v-if="isLoading")
 
-    Chat(v-if="authInfo" :authInfo="authInfo" :token="token")
+    //- Chat(v-if="authInfo" :authInfo="authInfo" :token="token")
 
 </template>
 

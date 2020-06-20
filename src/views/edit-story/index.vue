@@ -1,5 +1,5 @@
 <template lang="pug">
-  .edit-story(v-if="pageList && pageList[0]")
+  section.edit-story(v-if="pageList && pageList[0]")
     h1.edit-story__title {{ pageList[0].title }}
 
     ul.edit-story__list(v-for="(pageList, i) in groupedPageList" :key="i")

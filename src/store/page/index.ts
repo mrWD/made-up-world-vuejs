@@ -42,7 +42,7 @@ const page: Module<IPageState, IRootState> = {
       try {
         commit(UPDATE_REQUEST_COUNT, true, { root: true });
 
-        const { data } = await axios.get<IPage[]>(`${VUE_APP_API_URL}/editing/edit`, {
+        const { data } = await axios.post<IPage[]>(`${VUE_APP_API_URL}/editing/edit`, {
           data: { storyURL },
           headers: { Authorization: localStorage.getItem(TOKEN) },
         });
